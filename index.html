@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klaudia & Wojciech · Czerwiec 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --page-bg:     #f5ede0;
+    --text:        #1a1008;
+    --accent:      #8a6030;
+    --accent-light:#b8924e;
+    --muted:       #9e7858;
+    --silk:        #6a4828;
+    --border:      rgba(138,96,48,0.22);
+    --card-bg:     rgba(138,96,48,0.05);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--page-bg);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 2rem;
+    text-align: center;
+    background: #f0e6d3;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 95%, rgba(138,96,48,0.1) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 35% at 10% 10%, rgba(201,169,110,0.13) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 35% at 90% 5%,  rgba(201,169,110,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    animation: flicker 4s ease-in-out infinite alternate;
+  }
+  .glow-1 { width: 380px; height: 380px; background: rgba(201,169,110,0.18); bottom: 8%; left: 4%; animation-delay: 0s; }
+  .glow-2 { width: 260px; height: 260px; background: rgba(180,140,80,0.13); bottom: 18%; right: 6%; animation-delay: 1.5s; }
+  .glow-3 { width: 180px; height: 180px; background: rgba(201,169,110,0.1);  top: 22%; left: 36%; animation-delay: 0.8s; }
+
+  @keyframes flicker {
+    0%   { opacity: 0.55; transform: scale(1); }
+    50%  { opacity: 0.85; transform: scale(1.05); }
+    100% { opacity: 0.65; transform: scale(0.97); }
+  }
+
+  .hero-ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    color: var(--accent);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+
+  .hero-names {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 12vw, 8rem);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 1.2s 0.5s forwards;
+  }
+
+  .hero-names .and {
+    font-style: italic;
+    color: var(--accent);
+    font-size: 0.6em;
+    display: block;
+    margin: 0.1em 0;
+  }
+
+  .hero-date {
+    margin-top: 2.5rem;
+    font-size: clamp(0.75rem, 2vw, 0.95rem);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--muted);
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 1.2s 0.9s forwards;
+  }
+
+  .hero-location {
+    margin-top: 0.6rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    color: var(--accent-light);
+    opacity: 0;
+    animation: fadeUp 1.2s 1.1s forwards;
+  }
+
+  .divider {
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+    margin: 2.5rem auto;
+    opacity: 0;
+    animation: fadeIn 1.5s 1.3s forwards;
+  }
+
+  .hero-scroll {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    opacity: 0;
+    animation: fadeUp 1s 1.8s forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── COUNTDOWN ── */
+  .countdown {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 3rem 0 2rem;
+  }
+  .count-unit { text-align: center; min-width: 70px; }
+  .count-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--accent-light);
+    line-height: 1;
+    display: block;
+  }
+  .count-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+  .count-sep {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: var(--accent);
+    align-self: center;
+    opacity: 0.35;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(245,237,224,0.93);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--accent);
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.6rem;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── SECTIONS ── */
+  section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 2.5rem;
+  }
+
+  .section-title em { font-style: italic; color: var(--accent-light); }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--accent) 8%, var(--accent) 92%, transparent);
+  }
+
+  .day-block { margin-bottom: 4rem; }
+
+  .day-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--accent-light);
+    padding-left: 2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .day-label::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px rgba(138,96,48,0.4);
+  }
+
+  .event {
+    padding: 1.4rem 1.5rem 1.4rem 2rem;
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+    border-left: 1px solid rgba(138,96,48,0.18);
+    position: relative;
+    transition: border-color 0.3s, background 0.3s;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .event:hover {
+    border-color: rgba(138,96,48,0.45);
+    background: rgba(138,96,48,0.04);
+  }
+
+  .event-time {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.35rem;
+  }
+
+  .event-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .event-location {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .event-note {
+    font-size: 1.3rem;
+    color: var(--silk);
+    margin-top: 0.45rem;
+    line-height: 1.65;
+  }
+
+  /* ── ACCOMMODATION ── */
+  .accom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .accom-card {
+    border: 1px solid var(--border);
+    padding: 2rem;
+    background: var(--card-bg);
+    transition: border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .accom-card:hover { border-color: rgba(138,96,48,0.4); }
+
+  .accom-tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .accom-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+
+  .accom-address {
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    margin-bottom: 0.9rem;
+  }
+
+  .accom-note {
+    font-size: 0.82rem;
+    color: var(--silk);
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+  }
+
+  .accom-dates {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .accom-date {
+    border-top: 1px solid var(--border);
+    padding-top: 0.7rem;
+    min-width: 110px;
+  }
+
+  .accom-date-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .accom-date-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  /* ── TRANSPORTATION ── */
+  .transport-card {
+    border: 1px solid var(--border);
+    padding: 3rem 2.5rem;
+    background: var(--card-bg);
+    text-align: center;
+  }
+
+  .transport-icon { font-size: 2.2rem; margin-bottom: 1rem; opacity: 0.4; }
+
+  .transport-tba {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.8rem;
+    color: var(--accent-light);
+    margin-bottom: 0.6rem;
+  }
+
+  .transport-note {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* ── WISH LIST ── */
+  .wishlist-intro {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--silk);
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+  }
+
+  .wishlist-placeholder {
+    border: 1px dashed var(--border);
+    padding: 3.5rem;
+    text-align: center;
+    background: var(--card-bg);
+  }
+
+  .wishlist-placeholder p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--accent-light);
+  }
+
+  /* ── ANNOUNCEMENTS ── */
+  .announcements-grid { display: grid; gap: 1rem; }
+
+  .announcement-item {
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .announcement-item:hover {
+    background: rgba(138,96,48,0.08);
+    border-color: rgba(138,96,48,0.35);
+  }
+
+  .announcement-date {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .announcement-text {
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: var(--silk);
+  }
+
+  .add-announcement-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1.2rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: opacity 0.3s, border-color 0.3s, color 0.3s;
+  }
+
+  .add-announcement-btn:hover {
+    opacity: 1;
+    border-color: var(--accent);
+    color: var(--accent);
+    background: transparent;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(240,230,211,0.88);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--page-bg);
+    border: 1px solid rgba(138,96,48,0.3);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 24px 60px rgba(138,96,48,0.12);
+  }
+
+  .modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+    color: var(--text);
+  }
+
+  .modal input, .modal textarea {
+    width: 100%;
+    background: rgba(138,96,48,0.04);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+    resize: vertical;
+  }
+
+  .modal input:focus, .modal textarea:focus { border-color: var(--accent); }
+  .modal input::placeholder, .modal textarea::placeholder { color: var(--muted); opacity: 0.7; }
+
+  .modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+
+  .btn-cancel {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.4rem;
+    cursor: pointer;
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .btn-cancel:hover { border-color: var(--muted); color: var(--text); }
+
+  .btn-post {
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    color: var(--page-bg);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.8rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .btn-post:hover { background: var(--accent-light); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 4rem 2rem;
+    border-top: 1px solid var(--border);
+    background: rgba(138,96,48,0.04);
+  }
+
+  footer .footer-names {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 2rem;
+    color: var(--accent-light);
+    margin-bottom: 0.5rem;
+  }
+
+  footer p {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+  }
+
+  .sep {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+  }
+
+  @media (max-width: 660px) {
+    .accom-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    .nav-links { gap: 1rem; }
+    .nav-links a { font-size: 0.62rem; letter-spacing: 0.1em; }
+    .countdown { gap: 1rem; }
+    .count-sep { display: none; }
+  }
+  @media (max-width: 400px) {
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">K & W</div>
+  <ul class="nav-links">
+    <li><a href="#schedule">Program</a></li>
+    <li><a href="#accommodation">Noclegi</a></li>
+    <li><a href="#transport">Transport</a></li>
+    <li><a href="#wishlist">Lista życzeń</a></li>
+    <li><a href="#updates">Ogłoszenia</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="glow glow-3"></div>
+
+  <p class="hero-ornament">Bierzemy ślub</p>
+  <h1 class="hero-names">
+    Klaudia
+    <span class="and">&amp;</span>
+    Wojciech
+  </h1>
+  <div class="divider"></div>
+  <p class="hero-date">20 · VI · 2026</p>
+  <p class="hero-location">Soragna, Emilia-Romagna, Italy</p>
+
+  <div class="countdown" id="countdown">
+    <div class="count-unit"><span class="count-number" id="cd-days">—</span><span class="count-label">Dni</span></div>
+    <span class="count-sep">·</span>
+    <div class="count-unit"><span class="count-number" id="cd-hours">—</span><span class="count-label">Godziny</span></div>
+    <span class="count-sep">·</span>
+    <div class="count-unit"><span class="count-number" id="cd-mins">—</span><span class="count-label">Minuty</span></div>
+  </div>
+
+  <a href="#schedule" class="hero-scroll">Przewiń w dół ↓</a>
+</div>
+
+<div class="sep"></div>
+
+<!-- UPDATES -->
+<section id="updates">
+  <p class="section-label">Od Młodej Pary</p>
+  <h2 class="section-title">Najnowsze <em>ogłoszenia</em></h2>
+
+  <div class="announcements-grid" id="announcements-list">
+    <div class="announcement-item">
+      <div class="announcement-date">Marzec 2026</div>
+      <div class="announcement-text">
+        Prosimy o regularne sprawdzanie tej strony — szczególnie w dniu ślubu, gdzie będziemy publikować bieżące informacje o godzinach, transporcie i innych ważnych szczegółach. Nie możemy się doczekać świętowania z Wami we Włoszech! ✨
+      </div>
+    </div>
+  </div>
+
+  <button class="add-announcement-btn" onclick="openModal()">+ Dodaj ogłoszenie</button>
+</section>
+
+<div class="sep"></div>
+
+<!-- SCHEDULE -->
+<section id="schedule">
+  <p class="section-label">Weekend weselny</p>
+  <h2 class="section-title">Kilka dni w <em>bella Italia</em></h2>
+
+  <div class="timeline">
+
+    <div class="day-block">
+      <div class="day-label">Piątek, 19 czerwca — Przyjazd</div>
+      <div class="event">
+        <div class="event-time">Od godz. 13:00</div>
+        <div class="event-name">Zameldowanie</div>
+        <div class="event-location">Locanda del Lupo · Soragna &nbsp;/&nbsp; The Cube · Fidenza</div>
+        <div class="event-note">Czas na odpoczynek i przygotowanie się na wspólny weekend.</div>
+      </div>
+      <div class="event">
+        <div class="event-time">18:00 — 22:00</div>
+        <div class="event-name">Pizza Party</div>
+        <div class="event-location">Locanda del Lupo · Soragna</div>
+        <div class="event-note">Zaczynamy weekend przy pizzy, winie i w dobrym towarzystwie. Strój casual.</div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-label">Sobota, 20 czerwca — Dzień Ślubu</div>
+      <div class="event">
+        <div class="event-time">Rano</div>
+        <div class="event-name">Śniadanie</div>
+        <div class="event-location">Locanda del Lupo · Soragna</div>
+        <div class="event-note">Wspólne śniadanie dla wszystkich gości w hotelu.</div>
+      </div>
+      <div class="event">
+        <div class="event-time">15:30 · Prosimy o przybycie do 15:15</div>
+        <div class="event-name">Ceremonia Ślubna</div>
+        <div class="event-location">Chiesa parrocchiale San Giacomo Apostolo · Soragna</div>
+        <div class="event-note">Ceremonia rozpoczyna się o godz. 15:30. Prosimy o zajęcie miejsca w kościele do godz. 15:15.</div>
+      </div>
+      <div class="event">
+        <div class="event-time">17:00 — 2:00 w nocy</div>
+        <div class="event-name">Wesele</div>
+        <div class="event-location">Rocca di Soragna · Soragna</div>
+        <div class="event-note">Aperitivo, kolacja i taniec do białego rana.</div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-label">Niedziela, 21 czerwca</div>
+      <div class="event">
+        <div class="event-time">Rano</div>
+        <div class="event-name">Śniadanie</div>
+        <div class="event-location">Locanda del Lupo · Soragna</div>
+        <div class="event-note">Spokojne, niedzielne śniadanie — czas na odpoczynek i wspomnienia.</div>
+      </div>
+      <div class="event">
+        <div class="event-time">13:00</div>
+        <div class="event-name">Wymeldowanie</div>
+        <div class="event-location">Locanda del Lupo · Soragna &nbsp;/&nbsp; The Cube · Fidenza</div>
+        <div class="event-note">Możliwość przechowania bagażu, jeśli chcecie jeszcze chwilę pozwiedzać okolicę.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ACCOMMODATION -->
+<section id="accommodation">
+  <p class="section-label">Gdzie spać</p>
+  <h2 class="section-title">Wasz dom na <em>ten weekend</em></h2>
+
+  <div class="accom-grid">
+    <div class="accom-card">
+      <span class="accom-tag">Opcja 1 · Soragna</span>
+      <div class="accom-name">Locanda del Lupo</div>
+      <div class="accom-address">Via Garibaldi 64, 43019 Soragna (PR), Emilia-Romagna</div>
+      <p class="accom-note">Historyczna gospoda w sercu Soragny, słynąca z ciepłej gościnności i kuchni emiliańskiej. Wszystkie miejsca weselne w zasięgu krótkiego spaceru.</p>
+      <div class="accom-dates">
+        <div class="accom-date">
+          <span class="accom-date-label">Zameldowanie</span>
+          <span class="accom-date-value">Pt 19 czerwca · od 13:00</span>
+        </div>
+        <div class="accom-date">
+          <span class="accom-date-label">Wymeldowanie</span>
+          <span class="accom-date-value">Nd 21 czerwca · 13:00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accom-card">
+      <span class="accom-tag">Opcja 2 · Fidenza</span>
+      <div class="accom-name">The Cube</div>
+      <div class="accom-address">Fidenza, Emilia-Romagna, Włochy</div>
+      <p class="accom-note">Nowoczesny hotel w pobliskiej Fidenzie, oferujący komfortowy nocleg w niewielkiej odległości od Soragny i wszystkich uroczystości.</p>
+      <div class="accom-dates">
+        <div class="accom-date">
+          <span class="accom-date-label">Zameldowanie</span>
+          <span class="accom-date-value">Pt 19 czerwca · od 13:00</span>
+        </div>
+        <div class="accom-date">
+          <span class="accom-date-label">Wymeldowanie</span>
+          <span class="accom-date-value">Nd 21 czerwca · 13:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- TRANSPORTATION -->
+<section id="transport">
+  <p class="section-label">Jak dotrzeć</p>
+  <h2 class="section-title">Informacje <em>transportowe</em></h2>
+
+  <div class="transport-card">
+    <div class="transport-icon">🚌</div>
+    <div class="transport-tba">Do ogłoszenia</div>
+    <p class="transport-note">Organizujemy transport z lotnisk do miejsc weselnych i hoteli, a także między hotelami i wszystkimi obiektami w trakcie weekendu.<br>Szczegóły zostaną opublikowane tutaj oraz w sekcji Ogłoszenia, gdy tylko je potwierdzimy.<br>Prosimy o regularne sprawdzanie strony.</p>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- WISH LIST -->
+<section id="wishlist">
+  <p class="section-label">Prezenty</p>
+  <h2 class="section-title">Nasza <em>lista życzeń</em></h2>
+
+  <p class="wishlist-intro">Wasza obecność na naszym ślubie jest dla nas największym prezentem. Jeśli mimo wszystko chcielibyście nas czymś obdarować, wkrótce pojawi się tu nasza lista życzeń.</p>
+
+  <div class="wishlist-placeholder">
+    <p>Lista życzeń już wkrótce…</p>
+  </div>
+</section>
+
+<footer>
+  <p class="footer-names">Klaudia &amp; Wojciech</p>
+  <p>20 czerwca 2026 · Soragna, Włochy</p>
+</footer>
+
+<!-- PASSWORD MODAL -->
+<div class="modal-overlay" id="pwd-modal">
+  <div class="modal">
+    <div class="modal-title">Dostęp administratora</div>
+    <input type="password" id="pwd-input" placeholder="Wprowadź hasło…" autocomplete="off" />
+    <p id="pwd-error" style="display:none; font-size:0.78rem; color:#b85030; margin-top:-0.5rem; margin-bottom:0.8rem; letter-spacing:0.05em;">Nieprawidłowe hasło. Spróbuj ponownie.</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.getElementById('pwd-modal').classList.remove('open'); document.getElementById('pwd-input').value=''; document.getElementById('pwd-error').style.display='none';">Anuluj</button>
+      <button class="btn-post" onclick="checkPassword()">Dalej</button>
+    </div>
+  </div>
+</div>
+
+<!-- POST MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">Dodaj ogłoszenie</div>
+    <input type="text" id="modal-date" placeholder="Data (np. Maj 2026)" />
+    <textarea id="modal-text" rows="5" placeholder="Wiadomość dla gości…"></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Anuluj</button>
+      <button class="btn-post" onclick="postAnnouncement()">Opublikuj</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── COUNTDOWN ──
+  function updateCountdown() {
+    const target = new Date('2026-06-20T15:30:00');
+    const now = new Date();
+    const diff = target - now;
+    if (diff <= 0) {
+      document.getElementById('countdown').innerHTML =
+        '<p style="font-family:\'Cormorant Garamond\',serif;font-style:italic;color:var(--accent-light);font-size:1.5rem;">To jest ten dzień! ✨</p>';
+      return;
+    }
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000) / 60000);
+    document.getElementById('cd-days').textContent  = days;
+    document.getElementById('cd-hours').textContent = hours;
+    document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 30000);
+
+  // ── PASSWORD GATE ──
+  const ADMIN_PASSWORD = 'soragna2026';
+  let authenticated = false;
+
+  function openModal() {
+    if (authenticated) {
+      document.getElementById('modal').classList.add('open');
+      return;
+    }
+    document.getElementById('pwd-modal').classList.add('open');
+  }
+
+  function checkPassword() {
+    const val = document.getElementById('pwd-input').value;
+    if (val === ADMIN_PASSWORD) {
+      authenticated = true;
+      document.getElementById('pwd-modal').classList.remove('open');
+      document.getElementById('pwd-error').style.display = 'none';
+      document.getElementById('pwd-input').value = '';
+      document.getElementById('modal').classList.add('open');
+    } else {
+      document.getElementById('pwd-error').style.display = 'block';
+      document.getElementById('pwd-input').value = '';
+      document.getElementById('pwd-input').focus();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('pwd-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkPassword();
+    });
+    document.getElementById('pwd-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('open');
+        document.getElementById('pwd-error').style.display = 'none';
+        document.getElementById('pwd-input').value = '';
+      }
+    });
+  });
+
+  function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+  function postAnnouncement() {
+    const dateVal = document.getElementById('modal-date').value.trim();
+    const textVal = document.getElementById('modal-text').value.trim();
+    if (!textVal) return;
+    const list = document.getElementById('announcements-list');
+    const item = document.createElement('div');
+    item.className = 'announcement-item';
+    item.innerHTML = `
+      <div class="announcement-date">${dateVal || new Date().toLocaleDateString('pl-PL', {month:'long', year:'numeric'})}</div>
+      <div class="announcement-text">${textVal}</div>`;
+    list.insertBefore(item, list.firstChild);
+    document.getElementById('modal-date').value = '';
+    document.getElementById('modal-text').value = '';
+    closeModal();
+  }
+
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+</body>
+</html>
