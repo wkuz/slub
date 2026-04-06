@@ -863,6 +863,8 @@
 </div>
 
 <script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbyHR4FeLyhyMOyO88tU7boFy19nna0p8EwDsW-m1SPneXHxiAgcEulMddRvDZoxrVaV/exec';
+
   // ── COUNTDOWN ──
   function updateCountdown() {
     const target = new Date('2026-06-20T15:30:00');
@@ -883,8 +885,38 @@
   updateCountdown();
   setInterval(updateCountdown, 30000);
 
+  // ── LOAD ANNOUNCEMENTS FROM GOOGLE SHEETS ──
+  function renderAnnouncements(items) {
+    const list = document.getElementById('announcements-list');
+    list.innerHTML = '';
+    if (!items.length) {
+      list.innerHTML = '<p style="font-size:0.85rem;color:var(--muted);font-style:italic;">Brak ogłoszeń.</p>';
+      return;
+    }
+    items.forEach(a => {
+      const div = document.createElement('div');
+      div.className = 'announcement-item';
+      div.innerHTML = `
+        <div class="announcement-date">${a.date || ''}</div>
+        <div class="announcement-text">${a.text}</div>`;
+      list.appendChild(div);
+    });
+  }
+
+  function loadAnnouncements() {
+    const list = document.getElementById('announcements-list');
+    list.innerHTML = '<p style="font-size:0.85rem;color:var(--muted);font-style:italic;padding:1rem 0;">Ładowanie ogłoszeń…</p>';
+    fetch(API_URL)
+      .then(r => r.json())
+      .then(data => renderAnnouncements(data))
+      .catch(() => {
+        list.innerHTML = '<p style="font-size:0.85rem;color:var(--muted);font-style:italic;padding:1rem 0;">Nie udało się załadować ogłoszeń. Odśwież stronę.</p>';
+      });
+  }
+
+  loadAnnouncements();
+
   // ── PASSWORD GATE ──
-  const ADMIN_PASSWORD = 'soragna2026';
   let authenticated = false;
 
   function openModal() {
@@ -897,17 +929,14 @@
 
   function checkPassword() {
     const val = document.getElementById('pwd-input').value;
-    if (val === ADMIN_PASSWORD) {
-      authenticated = true;
-      document.getElementById('pwd-modal').classList.remove('open');
-      document.getElementById('pwd-error').style.display = 'none';
-      document.getElementById('pwd-input').value = '';
-      document.getElementById('modal').classList.add('open');
-    } else {
-      document.getElementById('pwd-error').style.display = 'block';
-      document.getElementById('pwd-input').value = '';
-      document.getElementById('pwd-input').focus();
-    }
+    // Password is verified server-side — just open the modal
+    if (val.trim() === '') return;
+    authenticated = true;
+    document.getElementById('_pwd_cache').value = val;
+    document.getElementById('pwd-modal').classList.remove('open');
+    document.getElementById('pwd-error').style.display = 'none';
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('modal').classList.add('open');
   }
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -923,27 +952,60 @@
     });
   });
 
-  function closeModal() { document.getElementById('modal').classList.remove('open'); }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
 
+  // ── POST ANNOUNCEMENT TO GOOGLE SHEETS ──
   function postAnnouncement() {
     const dateVal = document.getElementById('modal-date').value.trim();
     const textVal = document.getElementById('modal-text').value.trim();
+    const password = document.getElementById('_pwd_cache').value;
     if (!textVal) return;
-    const list = document.getElementById('announcements-list');
-    const item = document.createElement('div');
-    item.className = 'announcement-item';
-    item.innerHTML = `
-      <div class="announcement-date">${dateVal || new Date().toLocaleDateString('pl-PL', {month:'long', year:'numeric'})}</div>
-      <div class="announcement-text">${textVal}</div>`;
-    list.insertBefore(item, list.firstChild);
-    document.getElementById('modal-date').value = '';
-    document.getElementById('modal-text').value = '';
-    closeModal();
+
+    const btn = document.querySelector('#modal .btn-post');
+    btn.textContent = 'Wysyłanie…';
+    btn.disabled = true;
+
+    fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        password: password,
+        date: dateVal || new Date().toLocaleDateString('pl-PL', { month: 'long', year: 'numeric' }),
+        text: textVal
+      })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) {
+        // Wrong password
+        authenticated = false;
+        document.getElementById('_pwd_cache').value = '';
+        closeModal();
+        document.getElementById('pwd-error').style.display = 'block';
+        document.getElementById('pwd-modal').classList.add('open');
+      } else {
+        document.getElementById('modal-date').value = '';
+        document.getElementById('modal-text').value = '';
+        closeModal();
+        loadAnnouncements();
+      }
+    })
+    .catch(() => {
+      alert('Błąd połączenia. Sprawdź internet i spróbuj ponownie.');
+    })
+    .finally(() => {
+      btn.textContent = 'Opublikuj';
+      btn.disabled = false;
+    });
   }
 
   document.getElementById('modal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
 </script>
+
+<!-- Hidden password cache (never submitted anywhere beyond the API call) -->
+<input type="hidden" id="_pwd_cache" value="">
 </body>
 </html>
