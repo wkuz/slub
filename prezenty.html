@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista Prezentów · Klaudia & Wojciech</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --page-bg:     #f5ede0;
+    --text:        #1a1008;
+    --accent:      #8a6030;
+    --accent-light:#b8924e;
+    --muted:       #9e7858;
+    --silk:        #6a4828;
+    --border:      rgba(138,96,48,0.22);
+    --card-bg:     rgba(138,96,48,0.05);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--page-bg);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    padding: 1.2rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--accent);
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+  .nav-back {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-back:hover { color: var(--accent); }
+
+  /* ── PAGE ── */
+  .page { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+
+  .page-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .page-title em { font-style: italic; color: var(--accent-light); }
+
+  .intro {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--silk);
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    text-align: center;
+  }
+
+  /* ── STATS ── */
+  .stats { display:flex; justify-content:center; align-items:center; gap:1.5rem; margin-bottom:2rem; }
+  .stat { display:flex; flex-direction:column; align-items:center; }
+  .stat-num { font-family:'Cormorant Garamond',serif; font-size:2.2rem; font-weight:300; color:var(--accent-light); line-height:1; }
+  .stat-label { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted); margin-top:0.3rem; }
+  .stat-div { width:1px; height:32px; background:linear-gradient(to bottom, transparent, var(--accent), transparent); }
+
+  .my-btn {
+    display:block; margin:0 auto 2.5rem; background:transparent; border:1px solid var(--border);
+    color:var(--muted); font-family:'Jost',sans-serif; font-size:0.7rem; letter-spacing:0.18em;
+    text-transform:uppercase; padding:0.6rem 1.4rem; cursor:pointer; transition:all .3s;
+  }
+  .my-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+  .sep { width:100%; height:1px; background:linear-gradient(to right, transparent, var(--border), transparent); }
+
+  /* ── FILTERS ── */
+  .filters { display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem; margin:2rem 0; }
+  .filter-btn {
+    background:transparent; border:1px solid var(--border); color:var(--muted);
+    font-family:'Jost',sans-serif; font-size:0.65rem; letter-spacing:0.15em;
+    text-transform:uppercase; padding:0.45rem 1rem; cursor:pointer; transition:all .2s;
+  }
+  .filter-btn:hover { color:var(--accent); border-color:var(--accent); }
+  .filter-btn.active { background:var(--accent); color:var(--page-bg); border-color:var(--accent); }
+
+  /* ── GIFT CARDS ── */
+  .grid { display:flex; flex-direction:column; gap:1rem; }
+  .card {
+    background:var(--card-bg); border:1px solid var(--border);
+    padding:1.4rem 1.5rem; display:flex; gap:1.2rem; transition:all .3s;
+    border-radius:0 4px 4px 0; border-left:3px solid rgba(138,96,48,0.12);
+  }
+  .card:hover { border-color:rgba(138,96,48,0.4); background:rgba(138,96,48,0.06); border-left-color:var(--accent); }
+  .card-emoji { font-size:1.8rem; width:48px; height:48px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .card-body { flex:1; min-width:0; }
+  .card-title { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:300; color:var(--text); margin:0 0 0.2rem; }
+  .card-desc { font-size:0.8rem; color:var(--silk); margin:0 0 0.7rem; line-height:1.6; }
+  .card-meta { margin-bottom:0.6rem; }
+  .badge { font-size:0.65rem; color:var(--accent); background:rgba(138,96,48,0.08); padding:0.2rem 0.7rem; letter-spacing:0.1em; }
+  .badge-mine { font-size:0.72rem; color:var(--accent); font-style:italic; display:inline-block; margin-bottom:0.5rem; }
+  .no-one { font-size:0.72rem; color:var(--muted); font-style:italic; }
+  .product-link { font-size:0.72rem; color:var(--accent); text-decoration:none; display:inline-block; margin-bottom:0.5rem; border-bottom:1px solid rgba(138,96,48,0.3); transition:border-color .3s; }
+  .product-link:hover { border-color:var(--accent); }
+  .actions { display:flex; gap:0.6rem; flex-wrap:wrap; margin-top:0.3rem; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    background:var(--accent); color:var(--page-bg); border:1px solid var(--accent);
+    font-family:'Jost',sans-serif; font-size:0.68rem; letter-spacing:0.18em;
+    text-transform:uppercase; padding:0.55rem 1.3rem; cursor:pointer; transition:all .3s;
+  }
+  .btn:hover { background:var(--accent-light); border-color:var(--accent-light); }
+  .btn:disabled { opacity:.5; cursor:default; }
+  .btn-ghost {
+    background:transparent; border:1px solid var(--border); color:var(--muted);
+    font-family:'Jost',sans-serif; font-size:0.68rem; letter-spacing:0.15em;
+    text-transform:uppercase; padding:0.55rem 1.3rem; cursor:pointer; transition:all .3s;
+  }
+  .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+  .btn-ghost.danger { color:#b85030; border-color:rgba(184,80,48,0.3); }
+  .btn-ghost.danger:hover { border-color:#b85030; }
+
+  /* ── OVERLAY / MODAL ── */
+  .overlay {
+    position:fixed; inset:0; background:rgba(240,230,211,0.88);
+    backdrop-filter:blur(6px); z-index:200; display:flex;
+    align-items:center; justify-content:center; padding:2rem;
+  }
+  .modal {
+    background:var(--page-bg); border:1px solid rgba(138,96,48,0.3);
+    padding:2.5rem; width:100%; max-width:440px;
+    box-shadow:0 24px 60px rgba(138,96,48,0.12);
+  }
+  .modal-wide { max-width:480px; }
+  .modal-title { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; color:var(--text); margin:0 0 0.8rem; }
+  .modal-emoji { font-size:2.5rem; margin-bottom:0.5rem; text-align:center; }
+  .modal-desc { font-size:0.82rem; color:var(--silk); margin:0 0 1rem; line-height:1.6; }
+
+  .input {
+    width:100%; padding:0.8rem 1rem; border:1px solid var(--border);
+    background:rgba(138,96,48,0.04); color:var(--text); font-family:'Jost',sans-serif;
+    font-size:0.85rem; outline:none; margin-bottom:0.8rem; transition:border-color .3s;
+  }
+  .input:focus { border-color:var(--accent); }
+  .input::placeholder { color:var(--muted); opacity:0.7; }
+  .privacy-note { font-size:0.7rem; color:var(--muted); font-style:italic; margin:0 0 1.2rem; line-height:1.6; }
+  .modal-actions { display:flex; gap:0.8rem; justify-content:flex-end; }
+
+  .close-btn { background:none; border:none; font-size:1.2rem; color:var(--muted); cursor:pointer; padding:4px; transition:color .3s; position:absolute; top:1.2rem; right:1.2rem; }
+  .close-btn:hover { color:var(--accent); }
+
+  .code-box { border-top:1px solid var(--border); padding-top:1rem; margin-bottom:1rem; text-align:center; }
+  .code-label { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin:0 0 0.3rem; }
+  .code-value { font-family:'Cormorant Garamond',serif; font-size:2.5rem; font-weight:300; color:var(--accent-light); margin:0; letter-spacing:0.3em; }
+  .code-input { text-align:center; font-size:1.6rem; letter-spacing:0.5em; font-family:'Cormorant Garamond',serif; }
+
+  .contact-card { border:1px solid var(--border); padding:1rem; margin-bottom:0.7rem; background:var(--card-bg); }
+  .contact-card.mine { background:rgba(138,96,48,0.08); border-color:rgba(138,96,48,0.35); }
+  .contact-label { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:0.3rem; }
+  .contact-name { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:300; color:var(--text); }
+  .contact-info { font-size:0.78rem; color:var(--muted); }
+
+  .footer-note { text-align:center; margin-top:3rem; padding-top:2rem; border-top:1px solid var(--border); }
+  .footer-note p { font-size:0.82rem; color:var(--silk); line-height:1.7; font-style:italic; }
+  .footer-names { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.6rem; color:var(--accent-light); margin-bottom:0.3rem; }
+  .footer-sub { font-size:0.7rem; color:var(--muted); letter-spacing:0.15em; }
+
+  .loading { text-align:center; padding:3rem 0; }
+  .loading-text { font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--accent-light); font-size:1.1rem; }
+
+  @media (max-width: 520px) {
+    .page { padding: 3rem 1.2rem 4rem; }
+    .card { padding: 1rem; gap: 0.8rem; }
+    .card-emoji { font-size: 1.4rem; width: 38px; height: 38px; }
+    .stats { gap: 1rem; }
+    .modal { padding: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="index.html" class="nav-logo">K & W</a>
+  <a href="index.html" class="nav-back">← Powrót do strony</a>
+</div>
+
+<div class="page">
+  <p class="page-label">Prezenty</p>
+  <h1 class="page-title">Nasza <em>lista życzeń</em></h1>
+  <div id="gift-registry">
+    <div class="loading"><p class="loading-text">Ładowanie listy prezentów…</p></div>
+  </div>
+</div>
+
+<div id="modal-container"></div>
+
+<script>
+(function() {
+  // ⚠️ PASTE YOUR DEPLOYED GOOGLE APPS SCRIPT URL HERE:
+  const GIFTS_API_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+  let gifts = [], myCode = '', myGiftIds = [], activeCategory = 'wszystko';
+
+  const CATS = [
+    {key:'wszystko',label:'Wszystko'},{key:'kuchnia',label:'Kuchnia'},
+    {key:'dom',label:'Dom'},{key:'podróże',label:'Podróże'},
+    {key:'przeżycia',label:'Przeżycia'},{key:'inne',label:'Inne'}
+  ];
+
+  function pL(n) { return n===1?'1 osoba':n>=2&&n<=4?n+' osoby':n+' osób'; }
+  function pV(n) { return n===1?'zapisana':n<5?'zapisane':'zapisanych'; }
+
+  async function api(p) {
+    const u = new URL(GIFTS_API_URL);
+    Object.keys(p).forEach(k => u.searchParams.set(k, p[k]));
+    return (await fetch(u.toString())).json();
+  }
+
+  async function load() {
+    try {
+      gifts = await api({action:'getGifts'});
+      if (myCode) { const r = await api({action:'myReservations',code:myCode}); myGiftIds = r.giftIds||[]; }
+      render();
+    } catch(e) {
+      document.getElementById('gift-registry').innerHTML = '<p class="loading-text" style="color:var(--muted)">Nie udało się załadować listy. Odśwież stronę.</p>';
+    }
+  }
+
+  function render() {
+    const fl = activeCategory==='wszystko' ? gifts : gifts.filter(g=>g.category===activeCategory);
+    const tot=gifts.length, cl=gifts.filter(g=>g.signupCount>0).length;
+    let h='';
+    h+='<p class="intro">Waszą obecność na naszym ślubie uważamy za najpiękniejszy prezent. Jeśli jednak chcielibyście nas dodatkowo obdarować, poniżej znajdziecie listę rzeczy, o których wspólnie marzymy. Rezerwacja jest w pełni anonimowa — nie zobaczymy, kto co wybrał. Do droższych prezentów można dołączyć we\u00a0dwoje lub w\u00a0grupie.</p>';
+    h+='<div class="stats"><div class="stat"><span class="stat-num">'+tot+'</span><span class="stat-label">propozycji</span></div><div class="stat-div"></div><div class="stat"><span class="stat-num">'+cl+'</span><span class="stat-label">zarezerwowanych</span></div><div class="stat-div"></div><div class="stat"><span class="stat-num">'+(tot-cl)+'</span><span class="stat-label">wolnych</span></div></div>';
+    h+='<button class="my-btn" onclick="grMy()">Moje rezerwacje</button>';
+    h+='<div class="sep"></div>';
+    h+='<div class="filters">';
+    CATS.forEach(c=>{h+='<button class="filter-btn'+(c.key===activeCategory?' active':'')+'" onclick="grF(\''+c.key+'\')">'+c.label+'</button>';});
+    h+='</div><div class="grid">';
+    fl.forEach(g=>{
+      const n=g.signupCount||0, mine=myGiftIds.includes(g.id);
+      h+='<div class="card"><div class="card-emoji">'+g.image+'</div><div class="card-body">';
+      h+='<h3 class="card-title">'+g.name+'</h3><p class="card-desc">'+g.description+'</p>';
+      h+='<div class="card-meta">'+(n>0?'<span class="badge">'+pL(n)+' '+pV(n)+'</span>':'<span class="no-one">Nikt jeszcze się nie zapisał</span>')+'</div>';
+      if(g.link) h+='<a href="'+g.link+'" target="_blank" rel="noopener" class="product-link">Zobacz produkt ↗</a>';
+      if(mine) h+='<div class="badge-mine">Jesteś zapisany/a ✓</div>';
+      h+='<div class="actions">';
+      if(!mine) h+='<button class="btn" onclick="grClaim(\''+g.id+'\')">'+(n>0?'Dołącz':'Rezerwuję')+'</button>';
+      if(mine&&n>1) h+='<button class="btn-ghost" style="font-size:.62rem;padding:.4rem .9rem" onclick="grCo(\''+g.id+'\')">Współkupujący ('+(n-1)+')</button>';
+      h+='</div></div></div>';
+    });
+    h+='</div>';
+    h+='<div class="footer-note"><p>Lista jest orientacyjna — jeśli macie inny pomysł, chętnie się ucieszymy!<br>Najważniejsza jest Wasza obecność w tym wyjątkowym dniu.</p>';
+    h+='<p class="footer-names" style="margin-top:1.5rem">Klaudia &amp; Wojciech</p><p class="footer-sub">20 czerwca 2026 · Soragna, Włochy</p></div>';
+    document.getElementById('gift-registry').innerHTML = h;
+  }
+
+  window.grF = function(c) { activeCategory=c; render(); };
+
+  // ── Claim ──
+  window.grClaim = function(id) {
+    const g=gifts.find(x=>x.id===id); if(!g) return;
+    const n=g.signupCount||0;
+    let h='<div class="modal" onclick="event.stopPropagation()" style="text-align:center">';
+    h+='<div class="modal-emoji">'+g.image+'</div><h3 class="modal-title">'+g.name+'</h3>';
+    h+='<p class="modal-desc">'+g.description+'</p>';
+    if(n>0) h+='<p style="font-size:.72rem;color:var(--accent);font-style:italic;margin:0 0 1rem">Aktualnie '+pL(n)+' '+(n===1?'jest zapisana':n<5?'są zapisane':'jest zapisanych')+'</p>';
+    h+='<input class="input" id="c-name" placeholder="Imię i nazwisko">';
+    h+='<input class="input" id="c-contact" placeholder="E-mail lub telefon (do koordynacji zakupu)">';
+    h+='<p class="privacy-note">Dane kontaktowe będą widoczne wyłącznie dla innych osób zapisanych na ten sam prezent — w celu koordynacji zakupu. Para Młoda ich nie zobaczy.</p>';
+    h+='<div class="modal-actions"><button class="btn-ghost" onclick="grX()">Anuluj</button>';
+    h+='<button class="btn" id="c-sub" onclick="grSign(\''+id+'\')">Potwierdzam</button></div></div>';
+    showOv(h); setTimeout(()=>{const e=document.getElementById('c-name');if(e)e.focus();},80);
+  };
+
+  window.grSign = async function(id) {
+    const nm=document.getElementById('c-name')?.value?.trim(), ct=document.getElementById('c-contact')?.value?.trim();
+    if(!nm||!ct) return;
+    const b=document.getElementById('c-sub'); b.disabled=true; b.textContent='Zapisuję…';
+    const code=myCode||String(Math.floor(1000+Math.random()*9000));
+    try {
+      const r=await api({action:'signup',giftId:id,name:nm,contact:ct,code});
+      if(r.error){alert(r.error);b.disabled=false;b.textContent='Potwierdzam';return;}
+      if(!myCode)myCode=code; grX();
+      let h='<div class="modal" onclick="event.stopPropagation()" style="text-align:center">';
+      h+='<div class="modal-emoji">🎉</div><h3 class="modal-title">Zapisano!</h3>';
+      h+='<p class="modal-desc">Twoja rezerwacja na <strong>'+(gifts.find(x=>x.id===id)?.name||'')+'</strong> została zapisana.</p>';
+      h+='<div class="code-box"><p class="code-label">Twój kod rezerwacji</p><p class="code-value">'+code+'</p></div>';
+      h+='<p class="privacy-note">Zachowaj ten kod! Pozwoli Ci przeglądać rezerwacje, kontaktować się ze współkupującymi i anulować rezerwację.</p>';
+      h+='<button class="btn" onclick="grX()">Rozumiem</button></div>';
+      showOv(h); await load();
+    } catch{alert('Wystąpił błąd. Spróbuj ponownie.');b.disabled=false;b.textContent='Potwierdzam';}
+  };
+
+  // ── My reservations ──
+  window.grMy = function() { myCode ? showList() : showCode(); };
+
+  function showCode() {
+    let h='<div class="modal" onclick="event.stopPropagation()" style="text-align:center">';
+    h+='<h3 class="modal-title">Wpisz swój kod</h3>';
+    h+='<p class="modal-desc">Podaj 4-cyfrowy kod, który otrzymałeś/aś przy rezerwacji.</p>';
+    h+='<input class="input code-input" id="code-in" placeholder="····" maxlength="4">';
+    h+='<div class="modal-actions"><button class="btn-ghost" onclick="grX()">Anuluj</button>';
+    h+='<button class="btn" onclick="grCodeGo()">Dalej</button></div></div>';
+    showOv(h);
+    setTimeout(()=>{const e=document.getElementById('code-in');if(!e)return;e.focus();
+      e.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'').slice(0,4);});
+      e.addEventListener('keydown',function(ev){if(ev.key==='Enter')grCodeGo();});
+    },80);
+  }
+
+  window.grCodeGo = async function() {
+    const c=document.getElementById('code-in')?.value?.trim();
+    if(!c||c.length<4) return;
+    const r=await api({action:'verifyCode',code:c});
+    if(r.exists){myCode=c;grX();const r2=await api({action:'myReservations',code:c});myGiftIds=r2.giftIds||[];render();showList();}
+    else alert('Nie znaleziono rezerwacji z tym kodem.');
+  };
+
+  async function showList() {
+    const r=await api({action:'myReservations',code:myCode}); myGiftIds=r.giftIds||[];
+    const mg=gifts.filter(g=>myGiftIds.includes(g.id));
+    let h='<div class="modal modal-wide" onclick="event.stopPropagation()" style="position:relative">';
+    h+='<button class="close-btn" onclick="grX()">✕</button>';
+    h+='<h3 class="modal-title">Moje rezerwacje</h3>';
+    if(!mg.length) h+='<p style="font-size:.82rem;color:var(--muted);font-style:italic">Nie masz jeszcze żadnych rezerwacji.</p>';
+    else mg.forEach(g=>{
+      const ot=(g.signupCount||0)-1;
+      h+='<div class="contact-card"><div style="display:flex;align-items:center;gap:.7rem">';
+      h+='<span style="font-size:1.4rem">'+g.image+'</span><div>';
+      h+='<div class="contact-name" style="font-size:.95rem">'+g.name+'</div>';
+      if(ot>0) h+='<div style="font-size:.72rem;color:var(--accent);margin-top:.15rem">+ '+pL(ot)+'</div>';
+      h+='</div></div><div style="display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap">';
+      if(ot>0) h+='<button class="btn-ghost" style="font-size:.6rem;padding:.3rem .7rem" onclick="grX();grCo(\''+g.id+'\')">Współkupujący</button>';
+      h+='<button class="btn-ghost danger" style="font-size:.6rem;padding:.3rem .7rem" onclick="grDel(\''+g.id+'\')">Anuluj rezerwację</button>';
+      h+='</div></div>';
+    });
+    h+='</div>'; showOv(h);
+  }
+
+  window.grDel = async function(id) {
+    if(!confirm('Czy na pewno chcesz anulować tę rezerwację?')) return;
+    await api({action:'cancel',giftId:id,code:myCode}); grX(); await load();
+  };
+
+  // ── Co-contributors ──
+  window.grCo = async function(id) {
+    const g=gifts.find(x=>x.id===id); if(!g||!myCode) return;
+    const r=await api({action:'coContributors',giftId:id,code:myCode});
+    if(r.error){alert(r.error);return;}
+    const all=r.contributors||[], mine=all.find(c=>c.code===myCode), oth=all.filter(c=>c.code!==myCode);
+    let h='<div class="modal modal-wide" onclick="event.stopPropagation()" style="position:relative">';
+    h+='<button class="close-btn" onclick="grX()">✕</button>';
+    h+='<h3 class="modal-title">Współkupujący</h3>';
+    h+='<p class="modal-desc">Dane kontaktowe osób zapisanych na <strong>'+g.name+'</strong>. Ustalcie między sobą, kto kupi prezent.</p>';
+    if(mine){h+='<div class="contact-card mine"><div class="contact-label">Ty</div><div class="contact-name">'+mine.name+'</div><div class="contact-info">'+mine.contact+'</div></div>';}
+    if(oth.length) oth.forEach(c=>{h+='<div class="contact-card"><div class="contact-name">'+c.name+'</div><div class="contact-info">'+c.contact+'</div></div>';});
+    else h+='<p style="font-size:.78rem;color:var(--accent);font-style:italic">Na razie tylko Ty jesteś zapisany/a.</p>';
+    h+='</div>'; showOv(h);
+  };
+
+  // ── Overlay helpers ──
+  function showOv(inner) { document.getElementById('modal-container').innerHTML='<div class="overlay" onclick="grX()">'+inner+'</div>'; }
+  window.grX = function() { document.getElementById('modal-container').innerHTML=''; };
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') grX(); });
+
+  load();
+})();
+</script>
+</body>
+</html>
