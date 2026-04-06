@@ -408,11 +408,17 @@
 
   window.grAdminSave=async function(){
     try{
-      var r=await apiPost({action:'adminUpdateGifts',password:'soragna2026',gifts:window._adminGifts});
-      if(r.error){alert(r.error);return;}
-      closeM('modal-admin');
-      await load();
-    }catch(e){alert('Błąd zapisu. Spróbuj ponownie.');}
+      var giftsJson=JSON.stringify(window._adminGifts);
+      // If URL would be too long, fall back to fewer params
+      if(giftsJson.length > 5000){
+        alert('Za dużo danych. Spróbuj zmniejszyć liczbę prezentów lub skrócić opisy.');
+        return;
+      }
+      var r=await api({action:'adminUpdateGifts',password:'soragna2026',gifts:giftsJson});
+      if(r && r.error){alert('Błąd: '+r.error);return;}
+      if(r && r.success){closeM('modal-admin');await load();return;}
+      alert('Nieoczekiwana odpowiedź serwera.');
+    }catch(e){alert('Błąd zapisu: '+e.message);}
   };
 
   // ── Init ──
