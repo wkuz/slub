@@ -445,6 +445,13 @@
     padding: 3.5rem;
     text-align: center;
     background: var(--card-bg);
+    cursor: pointer;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .wishlist-placeholder:hover {
+    border-color: rgba(138,96,48,0.45);
+    background: rgba(138,96,48,0.08);
   }
 
   .wishlist-placeholder p {
@@ -642,7 +649,7 @@
     <li><a href="#schedule">Program</a></li>
     <li><a href="#accommodation">Noclegi</a></li>
     <li><a href="#transport">Transport</a></li>
-    <li><a href="#wishlist">Lista życzeń</a></li>
+    <li><a href="prezenty.html">Lista życzeń</a></li>
     <li><a href="#updates">Ogłoszenia</a></li>
   </ul>
 </nav>
@@ -824,10 +831,17 @@
   <p class="section-label">Prezenty</p>
   <h2 class="section-title">Nasza <em>lista życzeń</em></h2>
 
-  <p class="wishlist-intro">Wasza obecność na naszym ślubie jest dla nas największym prezentem. Jeśli mimo wszystko chcielibyście nas czymś obdarować, wkrótce pojawi się tu nasza lista życzeń.</p>
+  <p class="wishlist-intro">Drodzy Goście, 
+Wasza obecność na naszym ślubie, zwłaszcza w tak wyjątkowym miejscu, jest dla nas największym zaszczytem i najpiękniejszym darem. W pełni doceniamy trud i zaangażowanie związane z podróżą — dlatego nie czujemy się w żaden sposób uprawnieni do oczekiwania dodatkowych upominków. 
+Jeśli zechcecie nas obdarować, będziemy wdzięczni za gest, który w sposób możliwie najbardziej swobodny i niewymuszony pozwoli nam wspólnie kształtować naszą przyszłość oraz realizować plany, które są nam szczególnie bliskie.
+Z myślą o osobach, które skłaniają się ku bardziej tradycyjnej formie podarunku, przygotowaliśmy listę inspiracji. 
+Uprzejmie prosimy, aby ewentualne prezenty rzeczowe — o ile taka forma zostanie wybrana — zostały przesłane bezpośrednio na ul. Struga 22/36, 90-120 Łódź. W dniach od 15.06.2026 do 30.06.2026 nie będziemy mieli możliwości odbioru paczek. 
+Mając na uwadze charakter wskazanych propozycji, pozostawiamy Wam pełną swobodę w ewentualnym łączeniu się w grupy przy wyborze podarunku.
+Lista prezentowa pozostaje otwarta do dnia 31 maja 2026 roku.
+</p>
 
-  <div class="wishlist-placeholder">
-    <p>Lista życzeń już wkrótce…</p>
+  <div class="wishlist-placeholder" style="cursor:pointer" onclick="window.location.href='prezenty.html'">
+    <p>Zobacz naszą listę prezentów →</p>
   </div>
 </section>
 
