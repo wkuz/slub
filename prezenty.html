@@ -7,633 +7,416 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --page-bg:     #f5ede0;
-    --text:        #1a1008;
-    --accent:      #8a6030;
-    --accent-light:#b8924e;
-    --muted:       #9e7858;
-    --silk:        #6a4828;
-    --border:      rgba(138,96,48,0.22);
-    --card-bg:     rgba(138,96,48,0.05);
+    --page-bg:#f5ede0; --text:#1a1008; --accent:#8a6030; --accent-light:#b8924e;
+    --muted:#9e7858; --silk:#6a4828; --border:rgba(138,96,48,0.22); --card-bg:rgba(138,96,48,0.05);
   }
-
   html { scroll-behavior: smooth; }
+  body { background-color: var(--page-bg); color: var(--text); font-family: 'Jost', sans-serif; font-weight: 300; overflow-x: hidden; }
 
-  body {
-    background-color: var(--page-bg);
-    color: var(--text);
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    overflow-x: hidden;
-  }
+  .topbar { position:sticky;top:0;z-index:100;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(245,237,224,0.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--border); }
+  .topbar-logo { font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--accent);font-size:1.2rem;letter-spacing:.05em;text-decoration:none;white-space:nowrap; }
+  .topbar-back { color:var(--muted);text-decoration:none;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;transition:color .3s; }
+  .topbar-back:hover { color:var(--accent); }
 
-  /* ── TOP BAR ── */
-  .topbar {
-    position: sticky; top: 0; z-index: 100;
-    padding: 1rem 2rem;
-    display: flex; justify-content: space-between; align-items: center;
-    background: rgba(245,237,224,0.93);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
-  }
-  .topbar-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic; color: var(--accent);
-    font-size: 1.2rem; letter-spacing: 0.05em;
-    text-decoration: none; white-space: nowrap;
-  }
-  .topbar-back {
-    color: var(--muted); text-decoration: none;
-    font-size: 0.7rem; letter-spacing: 0.18em;
-    text-transform: uppercase; transition: color 0.3s;
-  }
-  .topbar-back:hover { color: var(--accent); }
+  .page-wrap { max-width:900px;margin:0 auto;padding:5rem 2rem 4rem; }
+  .section-label { font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem; }
+  .section-title { font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(2rem,5vw,3.5rem);line-height:1.1;color:var(--text);margin-bottom:2.5rem; }
+  .section-title em { font-style:italic;color:var(--accent-light); }
+  .intro-text { font-size:.88rem;line-height:1.8;color:var(--silk);max-width:580px;margin:0 auto 2.5rem;text-align:center; }
 
-  /* ── PAGE CONTAINER ── */
-  .page-wrap { max-width: 900px; margin: 0 auto; padding: 5rem 2rem 4rem; }
+  .stats-row { display:flex;justify-content:center;align-items:center;gap:2rem;margin-bottom:1.5rem; }
+  .stat-item { text-align:center;min-width:70px; }
+  .stat-number { font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:var(--accent-light);line-height:1;display:block; }
+  .stat-label { font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-top:.4rem; }
+  .stat-sep { font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--accent);align-self:center;opacity:.35; }
 
-  .section-label {
-    font-size: 0.7rem; letter-spacing: 0.4em;
-    text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;
-  }
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 300; font-size: clamp(2rem, 5vw, 3.5rem);
-    line-height: 1.1; color: var(--text); margin-bottom: 2.5rem;
-  }
-  .section-title em { font-style: italic; color: var(--accent-light); }
+  .reservations-btn { display:block;margin:0 auto 2.5rem;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;padding:.6rem 1.4rem;cursor:pointer;transition:all .3s; }
+  .reservations-btn:hover { border-color:var(--accent);color:var(--accent); }
+  .sep { width:100%;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent); }
 
-  .intro-text {
-    font-size: 0.88rem; line-height: 1.8; color: var(--silk);
-    max-width: 580px; margin: 0 auto 2.5rem; text-align: center;
-  }
+  .filters { display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem;margin:2rem 0 2.5rem; }
+  .filter-btn { background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;padding:.5rem 1.1rem;cursor:pointer;transition:all .2s; }
+  .filter-btn:hover { color:var(--accent);border-color:var(--accent); }
+  .filter-btn.active { background:var(--accent);color:var(--page-bg);border-color:var(--accent); }
 
-  /* ── STATS ── */
-  .stats-row { display: flex; justify-content: center; align-items: center; gap: 2rem; margin-bottom: 1.5rem; }
-  .stat-item { text-align: center; min-width: 70px; }
-  .stat-number {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 3rem; font-weight: 300; color: var(--accent-light); line-height: 1; display: block;
-  }
-  .stat-label { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); margin-top: 0.4rem; }
-  .stat-sep { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--accent); align-self: center; opacity: 0.35; }
+  .gift-grid { display:flex;flex-direction:column;gap:.8rem; }
+  .gift-card { padding:1.5rem 1.8rem;border:1px solid var(--border);background:var(--card-bg);display:flex;gap:1.2rem;transition:border-color .3s,background .3s; }
+  .gift-card:hover { border-color:rgba(138,96,48,0.4);background:rgba(138,96,48,0.07); }
+  .gift-emoji { font-size:1.8rem;width:50px;height:50px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:50%;background:radial-gradient(circle,rgba(201,169,110,0.13) 0%,transparent 70%); }
+  .gift-body { flex:1;min-width:0; }
+  .gift-name { font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:300;color:var(--text);margin:0 0 .2rem; }
+  .gift-desc { font-size:.8rem;color:var(--silk);margin:0 0 .8rem;line-height:1.65; }
+  .gift-meta { margin-bottom:.7rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap; }
+  .gift-badge { font-size:.65rem;letter-spacing:.1em;color:var(--accent);background:rgba(138,96,48,0.08);padding:.2rem .7rem; }
+  .gift-no-one { font-size:.72rem;color:var(--muted);font-style:italic; }
+  .gift-mine { font-size:.72rem;color:var(--accent);font-style:italic;display:inline-block;margin-bottom:.5rem; }
+  .gift-link { font-size:.72rem;color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(138,96,48,0.25);transition:border-color .3s;display:inline-block;margin-bottom:.5rem; }
+  .gift-link:hover { border-color:var(--accent); }
+  .gift-actions { display:flex;gap:.6rem;flex-wrap:wrap; }
 
-  /* ── MY RESERVATIONS BUTTON ── */
-  .reservations-btn {
-    display: block; margin: 0 auto 2.5rem;
-    background: transparent; border: 1px solid var(--border);
-    color: var(--muted); font-family: 'Jost', sans-serif;
-    font-size: 0.68rem; letter-spacing: 0.18em;
-    text-transform: uppercase; padding: 0.6rem 1.4rem;
-    cursor: pointer; transition: all 0.3s;
-  }
-  .reservations-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-primary { background:var(--accent);color:var(--page-bg);border:1px solid var(--accent);font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;padding:.55rem 1.3rem;cursor:pointer;transition:all .3s; }
+  .btn-primary:hover { background:var(--accent-light);border-color:var(--accent-light); }
+  .btn-primary:disabled { opacity:.45;cursor:default; }
+  .btn-secondary { background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;padding:.55rem 1.3rem;cursor:pointer;transition:all .3s; }
+  .btn-secondary:hover { border-color:var(--accent);color:var(--accent); }
+  .btn-danger { color:#b85030;border-color:rgba(184,80,48,0.3); }
+  .btn-danger:hover { border-color:#b85030;color:#b85030; }
 
-  .sep { width: 100%; height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent); }
+  .modal-overlay { display:none;position:fixed;inset:0;background:rgba(240,230,211,0.88);backdrop-filter:blur(6px);z-index:200;align-items:center;justify-content:center;padding:2rem; }
+  .modal-overlay.open { display:flex; }
+  .modal-box { background:var(--page-bg);border:1px solid rgba(138,96,48,0.3);padding:2.5rem;width:100%;max-width:440px;box-shadow:0 24px 60px rgba(138,96,48,0.12);position:relative; }
+  .modal-box.wide { max-width:560px; }
+  .modal-close { position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;transition:color .3s; }
+  .modal-close:hover { color:var(--accent); }
+  .modal-emoji { font-size:2.5rem;text-align:center;margin-bottom:.5rem; }
+  .modal-title { font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--text);margin-bottom:.8rem; }
+  .modal-desc { font-size:.82rem;color:var(--silk);margin-bottom:1rem;line-height:1.65; }
+  .modal-input { width:100%;padding:.8rem 1rem;border:1px solid var(--border);background:rgba(138,96,48,0.04);color:var(--text);font-family:'Jost',sans-serif;font-size:.85rem;outline:none;margin-bottom:.8rem;transition:border-color .3s; }
+  .modal-input:focus { border-color:var(--accent); }
+  .modal-input::placeholder { color:var(--muted);opacity:.7; }
+  .modal-input.code-style { text-align:center;font-size:1.6rem;letter-spacing:.5em;font-family:'Cormorant Garamond',serif; }
+  .modal-note { font-size:.7rem;color:var(--muted);font-style:italic;margin-bottom:1.2rem;line-height:1.6; }
+  .modal-actions { display:flex;gap:.8rem;justify-content:flex-end; }
 
-  /* ── FILTERS ── */
-  .filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin: 2rem 0 2.5rem; }
-  .filter-btn {
-    background: transparent; border: 1px solid var(--border); color: var(--muted);
-    font-family: 'Jost', sans-serif; font-size: 0.65rem; letter-spacing: 0.15em;
-    text-transform: uppercase; padding: 0.5rem 1.1rem; cursor: pointer; transition: all 0.2s;
-  }
-  .filter-btn:hover { color: var(--accent); border-color: var(--accent); }
-  .filter-btn.active { background: var(--accent); color: var(--page-bg); border-color: var(--accent); }
+  .code-display { border-top:1px solid var(--border);padding-top:1rem;margin-bottom:1rem;text-align:center; }
+  .code-display-label { font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem; }
+  .code-display-value { font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--accent-light);letter-spacing:.3em; }
 
-  /* ── GIFT CARDS ── */
-  .gift-grid { display: flex; flex-direction: column; gap: 0.8rem; }
+  .contact-card { border:1px solid var(--border);padding:1rem;margin-bottom:.7rem;background:var(--card-bg); }
+  .contact-card.highlighted { background:rgba(138,96,48,0.08);border-color:rgba(138,96,48,0.35); }
+  .contact-card-label { font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem; }
+  .contact-card-name { font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--text); }
+  .contact-card-info { font-size:.78rem;color:var(--muted); }
 
-  .gift-card {
-    padding: 1.5rem 1.8rem;
-    border: 1px solid var(--border);
-    background: var(--card-bg);
-    display: flex; gap: 1.2rem;
-    transition: border-color 0.3s, background 0.3s;
-  }
-  .gift-card:hover { border-color: rgba(138,96,48,0.4); background: rgba(138,96,48,0.07); }
+  /* ── Admin panel ── */
+  .admin-dot { background:none;border:none;color:var(--border);font-size:1.5rem;cursor:pointer;padding:.5rem;margin-top:.5rem;display:inline-block;transition:color .3s; }
+  .admin-dot:hover { color:var(--accent); }
+  .admin-scroll { max-height:50vh;overflow-y:auto;margin-bottom:1rem; }
+  .admin-row { display:flex;gap:.8rem;align-items:flex-start;padding:.8rem;border-bottom:1px solid var(--border); }
+  .admin-fields { flex:1; }
+  .admin-input { width:100%;padding:.45rem .6rem;border:1px solid var(--border);background:rgba(138,96,48,0.04);color:var(--text);font-family:'Jost',sans-serif;font-size:.78rem;outline:none;margin-bottom:.35rem; }
+  .admin-input:focus { border-color:var(--accent); }
+  .admin-input-row { display:flex;gap:.35rem;flex-wrap:wrap; }
+  .admin-select { padding:.45rem;border:1px solid var(--border);background:rgba(138,96,48,0.04);color:var(--text);font-family:'Jost',sans-serif;font-size:.78rem;outline:none; }
+  .admin-remove { background:none;border:1px solid rgba(184,80,48,0.3);color:#b85030;font-size:.6rem;padding:.3rem .6rem;cursor:pointer;flex-shrink:0;align-self:center;text-transform:uppercase;letter-spacing:.08em; }
+  .admin-info { font-size:.68rem;color:var(--accent);margin-top:.2rem;font-style:italic; }
 
-  .gift-emoji {
-    font-size: 1.8rem; width: 50px; height: 50px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; border-radius: 50%;
-    background: radial-gradient(circle, rgba(201,169,110,0.13) 0%, transparent 70%);
-  }
-  .gift-body { flex: 1; min-width: 0; }
-  .gift-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.35rem; font-weight: 300; color: var(--text); margin: 0 0 0.2rem;
-  }
-  .gift-desc { font-size: 0.8rem; color: var(--silk); margin: 0 0 0.8rem; line-height: 1.65; }
+  .page-footer { text-align:center;padding:3rem 2rem;border-top:1px solid var(--border);margin-top:3rem;background:rgba(138,96,48,0.04); }
+  .page-footer .footer-names { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:2rem;color:var(--accent-light);margin-bottom:.5rem; }
+  .page-footer p { font-size:.75rem;color:var(--muted);letter-spacing:.15em; }
+  .loading-state { text-align:center;padding:3rem; }
+  .loading-state p { font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--accent-light);font-size:1.2rem; }
 
-  .gift-meta { margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
-  .gift-badge {
-    font-size: 0.65rem; letter-spacing: 0.1em; color: var(--accent);
-    background: rgba(138,96,48,0.08); padding: 0.2rem 0.7rem;
-  }
-  .gift-no-one { font-size: 0.72rem; color: var(--muted); font-style: italic; }
-  .gift-mine {
-    font-size: 0.72rem; color: var(--accent); font-style: italic;
-    display: inline-block; margin-bottom: 0.5rem;
-  }
-  .gift-link {
-    font-size: 0.72rem; color: var(--accent); text-decoration: none;
-    border-bottom: 1px solid rgba(138,96,48,0.25); transition: border-color 0.3s;
-    display: inline-block; margin-bottom: 0.5rem;
-  }
-  .gift-link:hover { border-color: var(--accent); }
-
-  .gift-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-
-  /* ── BUTTONS ── */
-  .btn-primary {
-    background: var(--accent); color: var(--page-bg); border: 1px solid var(--accent);
-    font-family: 'Jost', sans-serif; font-size: 0.68rem; letter-spacing: 0.18em;
-    text-transform: uppercase; padding: 0.55rem 1.3rem; cursor: pointer; transition: all 0.3s;
-  }
-  .btn-primary:hover { background: var(--accent-light); border-color: var(--accent-light); }
-  .btn-primary:disabled { opacity: 0.45; cursor: default; }
-
-  .btn-secondary {
-    background: transparent; border: 1px solid var(--border); color: var(--muted);
-    font-family: 'Jost', sans-serif; font-size: 0.68rem; letter-spacing: 0.15em;
-    text-transform: uppercase; padding: 0.55rem 1.3rem; cursor: pointer; transition: all 0.3s;
-  }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-danger { color: #b85030; border-color: rgba(184,80,48,0.3); }
-  .btn-danger:hover { border-color: #b85030; color: #b85030; }
-
-  /* ── MODAL ── */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(240,230,211,0.88);
-    backdrop-filter: blur(6px); z-index: 200;
-    align-items: center; justify-content: center; padding: 2rem;
-  }
-  .modal-overlay.open { display: flex; }
-
-  .modal-box {
-    background: var(--page-bg); border: 1px solid rgba(138,96,48,0.3);
-    padding: 2.5rem; width: 100%; max-width: 440px;
-    box-shadow: 0 24px 60px rgba(138,96,48,0.12);
-    position: relative;
-  }
-  .modal-box.wide { max-width: 480px; }
-
-  .modal-close {
-    position: absolute; top: 1rem; right: 1rem;
-    background: none; border: none; font-size: 1.2rem;
-    color: var(--muted); cursor: pointer; transition: color 0.3s;
-  }
-  .modal-close:hover { color: var(--accent); }
-
-  .modal-emoji { font-size: 2.5rem; text-align: center; margin-bottom: 0.5rem; }
-  .modal-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.8rem; font-weight: 300; color: var(--text); margin-bottom: 0.8rem;
-  }
-  .modal-desc { font-size: 0.82rem; color: var(--silk); margin-bottom: 1rem; line-height: 1.65; }
-
-  .modal-input {
-    width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border);
-    background: rgba(138,96,48,0.04); color: var(--text);
-    font-family: 'Jost', sans-serif; font-size: 0.85rem;
-    outline: none; margin-bottom: 0.8rem; transition: border-color 0.3s;
-  }
-  .modal-input:focus { border-color: var(--accent); }
-  .modal-input::placeholder { color: var(--muted); opacity: 0.7; }
-  .modal-input.code-style {
-    text-align: center; font-size: 1.6rem; letter-spacing: 0.5em;
-    font-family: 'Cormorant Garamond', serif;
-  }
-
-  .modal-note { font-size: 0.7rem; color: var(--muted); font-style: italic; margin-bottom: 1.2rem; line-height: 1.6; }
-  .modal-actions { display: flex; gap: 0.8rem; justify-content: flex-end; }
-
-  .code-display { border-top: 1px solid var(--border); padding-top: 1rem; margin-bottom: 1rem; text-align: center; }
-  .code-display-label { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.3rem; }
-  .code-display-value {
-    font-family: 'Cormorant Garamond', serif; font-size: 2.5rem;
-    font-weight: 300; color: var(--accent-light); letter-spacing: 0.3em;
-  }
-
-  .contact-card { border: 1px solid var(--border); padding: 1rem; margin-bottom: 0.7rem; background: var(--card-bg); }
-  .contact-card.highlighted { background: rgba(138,96,48,0.08); border-color: rgba(138,96,48,0.35); }
-  .contact-card-label { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.3rem; }
-  .contact-card-name { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 300; color: var(--text); }
-  .contact-card-info { font-size: 0.78rem; color: var(--muted); }
-
-  /* ── FOOTER ── */
-  .page-footer {
-    text-align: center; padding: 3rem 2rem;
-    border-top: 1px solid var(--border);
-    margin-top: 3rem;
-    background: rgba(138,96,48,0.04);
-  }
-  .page-footer .footer-names {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic; font-size: 2rem; color: var(--accent-light); margin-bottom: 0.5rem;
-  }
-  .page-footer p { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.15em; }
-
-  .loading-state { text-align: center; padding: 3rem; }
-  .loading-state p {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic; color: var(--accent-light); font-size: 1.2rem;
-  }
-
-  @media (max-width: 660px) {
-    .page-wrap { padding: 4rem 1.2rem 3rem; }
-    .gift-card { padding: 1.2rem; gap: 0.8rem; }
-    .stats-row { gap: 1rem; }
-    .stat-sep { display: none; }
-    .modal-box { padding: 1.8rem; }
-  }
-  @media (max-width: 400px) {
-    .gift-emoji { width: 40px; height: 40px; font-size: 1.4rem; }
-    .gift-name { font-size: 1.15rem; }
-  }
+  @media (max-width:660px) { .page-wrap{padding:4rem 1.2rem 3rem} .gift-card{padding:1.2rem;gap:.8rem} .stats-row{gap:1rem} .stat-sep{display:none} .modal-box{padding:1.8rem} }
+  @media (max-width:400px) { .gift-emoji{width:40px;height:40px;font-size:1.4rem} .gift-name{font-size:1.15rem} }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="topbar">
   <a href="index.html" class="topbar-logo">K & W</a>
   <a href="index.html" class="topbar-back">← Powrót</a>
 </div>
 
-<!-- MAIN CONTENT -->
 <div class="page-wrap">
   <p class="section-label" style="text-align:center">Prezenty</p>
   <h1 class="section-title" style="text-align:center">Nasza <em>lista życzeń</em></h1>
-  <div id="registry-root">
-    <div class="loading-state"><p>Ładowanie listy prezentów…</p></div>
-  </div>
+  <div id="registry-root"><div class="loading-state"><p>Ładowanie listy prezentów…</p></div></div>
 </div>
 
-<!-- MODALS (reused by JS) -->
 <div class="modal-overlay" id="modal-claim"></div>
 <div class="modal-overlay" id="modal-success"></div>
 <div class="modal-overlay" id="modal-code"></div>
 <div class="modal-overlay" id="modal-reservations"></div>
 <div class="modal-overlay" id="modal-cobuyers"></div>
+<div class="modal-overlay" id="modal-admin-pwd"></div>
+<div class="modal-overlay" id="modal-admin"></div>
 
-<!-- FOOTER -->
 <footer class="page-footer">
   <p class="footer-names">Klaudia &amp; Wojciech</p>
   <p>20 czerwca 2026 · Soragna, Włochy</p>
+  <button class="admin-dot" onclick="grAdminGate()">·</button>
 </footer>
 
 <script>
 (function() {
 
-  // ═══════════════════════════════════════════════
-  // ⚠️  CONFIGURATION — fill in your API URL:
-  // ═══════════════════════════════════════════════
-  const GIFTS_API_URL = 'https://script.google.com/macros/s/AKfycbw9J9CF3rjayZWLWYYSvpGAMpdxhkTwopMd8epn_3YS1_N0Bs4NZZq9XquLV78Wb7kw/exec';
-  // If empty, fallback gifts below will be used (great for preview/testing).
+  const GIFTS_API_URL = '';
+  // ⚠️ Paste your Apps Script URL above. If empty, fallback data is used.
 
-  // ── Fallback gifts (used when API is not configured) ──
-  const FALLBACK_GIFTS = [
-    { id:'1', name:'Robot kuchenny KitchenAid Artisan', description:'Kultowy robot planetarny w kolorze kremowym', category:'kuchnia', image:'🍰', link:'', signupCount:0 },
-    { id:'2', name:'Zestaw garnków Le Creuset', description:'Żeliwne garnki idealne na lata wspólnego gotowania', category:'kuchnia', image:'🍲', link:'', signupCount:0 },
-    { id:'3', name:'Ekspres do kawy Sage Barista Pro', description:'Poranne espresso jak z najlepszej kawiarni', category:'kuchnia', image:'☕', link:'', signupCount:0 },
-    { id:'4', name:'Pościel lniana – komplet', description:'Naturalna pościel z najwyższej jakości lnu', category:'dom', image:'🛏️', link:'', signupCount:0 },
-    { id:'5', name:'Dywan perski do salonu', description:'Ręcznie tkany, 200×300 cm, ciepłe odcienie', category:'dom', image:'🏠', link:'', signupCount:0 },
-    { id:'6', name:'Walizki podróżne Samsonite (zestaw 2 szt.)', description:'Na wspólne podróże – kabinowa i duża', category:'podróże', image:'🧳', link:'', signupCount:0 },
-    { id:'7', name:'Voucher na kolację degustacyjną', description:'Restauracja z gwiazdką Michelin – wieczór dla dwojga', category:'przeżycia', image:'🍷', link:'', signupCount:0 },
-    { id:'8', name:'Aparat fotograficzny Fujifilm X-T5', description:'Uwiecznianie wspólnych wspomnień w pięknej jakości', category:'inne', image:'📸', link:'', signupCount:0 },
-    { id:'9', name:'Zestaw ręczników kąpielowych premium', description:'Bawełna egipska, 8 sztuk w ciepłych odcieniach', category:'dom', image:'🛁', link:'', signupCount:0 },
-    { id:'10', name:'Kurs gotowania włoskiego (dla pary)', description:'Tygodniowy kurs we Włoszech – pasta, pizza i więcej', category:'przeżycia', image:'🇮🇹', link:'', signupCount:0 },
+  const FALLBACK = [
+    {id:'1',name:'Robot kuchenny KitchenAid Artisan',description:'Kultowy robot planetarny w kolorze kremowym',category:'kuchnia',image:'🍰',link:'',signupCount:0},
+    {id:'2',name:'Zestaw garnków Le Creuset',description:'Żeliwne garnki idealne na lata wspólnego gotowania',category:'kuchnia',image:'🍲',link:'',signupCount:0},
+    {id:'3',name:'Ekspres do kawy Sage Barista Pro',description:'Poranne espresso jak z najlepszej kawiarni',category:'kuchnia',image:'☕',link:'',signupCount:0},
+    {id:'4',name:'Pościel lniana – komplet',description:'Naturalna pościel z najwyższej jakości lnu',category:'dom',image:'🛏️',link:'',signupCount:0},
+    {id:'5',name:'Dywan perski do salonu',description:'Ręcznie tkany, 200×300 cm, ciepłe odcienie',category:'dom',image:'🏠',link:'',signupCount:0},
+    {id:'6',name:'Walizki podróżne Samsonite (zestaw 2 szt.)',description:'Na wspólne podróże – kabinowa i duża',category:'podróże',image:'🧳',link:'',signupCount:0},
+    {id:'7',name:'Voucher na kolację degustacyjną',description:'Restauracja z gwiazdką Michelin – wieczór dla dwojga',category:'przeżycia',image:'🍷',link:'',signupCount:0},
+    {id:'8',name:'Aparat fotograficzny Fujifilm X-T5',description:'Uwiecznianie wspólnych wspomnień w pięknej jakości',category:'inne',image:'📸',link:'',signupCount:0},
+    {id:'9',name:'Zestaw ręczników kąpielowych premium',description:'Bawełna egipska, 8 sztuk w ciepłych odcieniach',category:'dom',image:'🛁',link:'',signupCount:0},
+    {id:'10',name:'Kurs gotowania włoskiego (dla pary)',description:'Tygodniowy kurs we Włoszech – pasta, pizza i więcej',category:'przeżycia',image:'🇮🇹',link:'',signupCount:0},
   ];
+  const CATS = [{key:'wszystko',label:'Wszystko'},{key:'kuchnia',label:'Kuchnia'},{key:'dom',label:'Dom'},{key:'podróże',label:'Podróże'},{key:'przeżycia',label:'Przeżycia'},{key:'inne',label:'Inne'}];
 
-  const CATEGORIES = [
-    {key:'wszystko',label:'Wszystko'}, {key:'kuchnia',label:'Kuchnia'},
-    {key:'dom',label:'Dom'}, {key:'podróże',label:'Podróże'},
-    {key:'przeżycia',label:'Przeżycia'}, {key:'inne',label:'Inne'}
-  ];
+  var gifts=[], myCode='', myGiftIds=[], activeCat='wszystko', apiOk=false, adminAuth=false;
 
-  let gifts = [];
-  let myCode = '';
-  let myGiftIds = [];
-  let activeCategory = 'wszystko';
-  let apiAvailable = false;
+  function pL(n){return n===1?'1 osoba':n>=2&&n<=4?n+' osoby':n+' osób';}
+  function pV(n){return n===1?'zapisana':n<5?'zapisane':'zapisanych';}
 
-  function pL(n) { return n===1?'1 osoba':n>=2&&n<=4?n+' osoby':n+' osób'; }
-  function pV(n) { return n===1?'zapisana':n<5?'zapisane':'zapisanych'; }
-
-  // ── API ──
-  async function api(params) {
-    if (!GIFTS_API_URL) throw new Error('No API');
-    const u = new URL(GIFTS_API_URL);
-    Object.keys(params).forEach(k => u.searchParams.set(k, params[k]));
-    const r = await fetch(u.toString());
+  async function api(p){
+    if(!GIFTS_API_URL) throw new Error('No API');
+    var u=new URL(GIFTS_API_URL);
+    Object.keys(p).forEach(function(k){u.searchParams.set(k,p[k]);});
+    return (await fetch(u.toString())).json();
+  }
+  async function apiPost(body){
+    if(!GIFTS_API_URL) throw new Error('No API');
+    var r=await fetch(GIFTS_API_URL,{method:'POST',body:JSON.stringify(body)});
     return r.json();
   }
 
-  // ── Load ──
-  async function loadGifts() {
-    try {
-      if (!GIFTS_API_URL) throw new Error('No API configured');
-      gifts = await api({ action: 'getGifts' });
-      apiAvailable = true;
-      if (myCode) {
-        const r = await api({ action: 'myReservations', code: myCode });
-        myGiftIds = r.giftIds || [];
-      }
-    } catch {
-      gifts = FALLBACK_GIFTS;
-      apiAvailable = false;
-    }
+  async function load(){
+    try{
+      if(!GIFTS_API_URL) throw 0;
+      gifts=await api({action:'getGifts'}); apiOk=true;
+      if(myCode){var r=await api({action:'myReservations',code:myCode}); myGiftIds=r.giftIds||[];}
+    }catch(e){gifts=FALLBACK;apiOk=false;}
     render();
   }
 
-  // ── Render ──
-  function render() {
-    const fl = activeCategory === 'wszystko' ? gifts : gifts.filter(g => g.category === activeCategory);
-    const tot = gifts.length;
-    const cl = gifts.filter(g => (g.signupCount || 0) > 0).length;
-
-    let h = '';
-
-    // Intro
-    h += '<p class="intro-text">Waszą obecność na naszym ślubie uważamy za najpiękniejszy prezent. Jeśli jednak chcielibyście nas dodatkowo obdarować, poniżej znajdziecie listę rzeczy, o których wspólnie marzymy. Rezerwacja jest w pełni anonimowa — nie zobaczymy, kto co wybrał. Do droższych prezentów można dołączyć we\u00a0dwoje lub w\u00a0grupie.</p>';
-
-    // Stats
-    h += '<div class="stats-row">';
-    h += '<div class="stat-item"><span class="stat-number">' + tot + '</span><span class="stat-label">propozycji</span></div>';
-    h += '<span class="stat-sep">·</span>';
-    h += '<div class="stat-item"><span class="stat-number">' + cl + '</span><span class="stat-label">zarezerwowanych</span></div>';
-    h += '<span class="stat-sep">·</span>';
-    h += '<div class="stat-item"><span class="stat-number">' + (tot - cl) + '</span><span class="stat-label">wolnych</span></div>';
-    h += '</div>';
-
-    // My reservations
-    if (apiAvailable) {
-      h += '<button class="reservations-btn" onclick="grMyReservations()">Moje rezerwacje</button>';
-    }
-
-    h += '<div class="sep"></div>';
-
-    // Filters
-    h += '<div class="filters">';
-    CATEGORIES.forEach(function(c) {
-      h += '<button class="filter-btn' + (c.key === activeCategory ? ' active' : '') + '" onclick="grFilter(\'' + c.key + '\')">' + c.label + '</button>';
-    });
-    h += '</div>';
-
-    // Cards
-    h += '<div class="gift-grid">';
-    fl.forEach(function(g) {
-      var n = g.signupCount || 0;
-      var mine = myGiftIds.indexOf(g.id) >= 0;
-
-      h += '<div class="gift-card">';
-      h += '<div class="gift-emoji">' + g.image + '</div>';
-      h += '<div class="gift-body">';
-      h += '<h3 class="gift-name">' + g.name + '</h3>';
-      h += '<p class="gift-desc">' + g.description + '</p>';
-
-      h += '<div class="gift-meta">';
-      if (n > 0) {
-        h += '<span class="gift-badge">' + pL(n) + ' ' + pV(n) + '</span>';
-      } else {
-        h += '<span class="gift-no-one">Nikt jeszcze się nie zapisał</span>';
-      }
-      h += '</div>';
-
-      if (g.link) {
-        h += '<a href="' + g.link + '" target="_blank" rel="noopener noreferrer" class="gift-link">Zobacz produkt ↗</a>';
-      }
-
-      if (mine) {
-        h += '<div class="gift-mine">Jesteś zapisany/a ✓</div>';
-      }
-
-      h += '<div class="gift-actions">';
-      if (!mine && apiAvailable) {
-        h += '<button class="btn-primary" onclick="grOpenClaim(\'' + g.id + '\')">' + (n > 0 ? 'Dołącz' : 'Rezerwuję') + '</button>';
-      }
-      if (mine && n > 1) {
-        h += '<button class="btn-secondary" style="font-size:.62rem;padding:.4rem .9rem" onclick="grShowCobuyers(\'' + g.id + '\')">Współkupujący (' + (n - 1) + ')</button>';
-      }
-      h += '</div>';
-
-      h += '</div></div>';
-    });
-    h += '</div>';
-
-    document.getElementById('registry-root').innerHTML = h;
-  }
-
-  // ── Filter ──
-  window.grFilter = function(cat) { activeCategory = cat; render(); };
-
-  // ── Helper: open/close modal ──
-  function openModal(id, html) {
-    var el = document.getElementById(id);
-    el.innerHTML = '<div class="modal-box" onclick="event.stopPropagation()">' + html + '</div>';
+  // ── Open / Close modal ──
+  function openM(id,html,wide){
+    var el=document.getElementById(id);
+    el.innerHTML='<div class="modal-box'+(wide?' wide':'')+'" onclick="event.stopPropagation()">'+html+'</div>';
     el.classList.add('open');
-    el.onclick = function(e) { if (e.target === el) closeModal(id); };
+    el.onclick=function(ev){if(ev.target===el)closeM(id);};
   }
-  function closeModal(id) { var el = document.getElementById(id); el.classList.remove('open'); el.innerHTML = ''; }
-  window.grCloseAll = function() {
-    ['modal-claim','modal-success','modal-code','modal-reservations','modal-cobuyers'].forEach(function(id) { closeModal(id); });
-  };
-  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') grCloseAll(); });
+  function closeM(id){var el=document.getElementById(id);el.classList.remove('open');el.innerHTML='';}
+  window.closeM=closeM;
+  document.addEventListener('keydown',function(ev){if(ev.key==='Escape'){
+    ['modal-claim','modal-success','modal-code','modal-reservations','modal-cobuyers','modal-admin-pwd','modal-admin'].forEach(closeM);
+  }});
 
-  // ══════════════════════════
-  //  CLAIM FLOW
-  // ══════════════════════════
-  window.grOpenClaim = function(giftId) {
-    var g = gifts.filter(function(x) { return x.id === giftId; })[0];
-    if (!g) return;
-    var n = g.signupCount || 0;
+  // ══════════════════════════════════════
+  //  RENDER
+  // ══════════════════════════════════════
+  function render(){
+    var fl=activeCat==='wszystko'?gifts:gifts.filter(function(g){return g.category===activeCat;});
+    var tot=gifts.length, cl=gifts.filter(function(g){return(g.signupCount||0)>0;}).length;
+    var h='';
 
-    var h = '<div style="text-align:center">';
-    h += '<div class="modal-emoji">' + g.image + '</div>';
-    h += '<h3 class="modal-title">' + g.name + '</h3>';
-    h += '<p class="modal-desc">' + g.description + '</p>';
-    if (n > 0) {
-      h += '<p style="font-size:.72rem;color:var(--accent);font-style:italic;margin:0 0 1rem">';
-      h += 'Aktualnie ' + pL(n) + ' ' + (n===1?'jest zapisana':n<5?'są zapisane':'jest zapisanych') + '</p>';
-    }
-    h += '<input class="modal-input" id="claim-name" placeholder="Imię i nazwisko">';
-    h += '<input class="modal-input" id="claim-contact" placeholder="E-mail lub telefon (do koordynacji zakupu)">';
-    h += '<p class="modal-note">Dane kontaktowe będą widoczne wyłącznie dla innych osób zapisanych na ten sam prezent — w celu koordynacji zakupu. Para Młoda ich nie zobaczy.</p>';
-    h += '<div class="modal-actions">';
-    h += '<button class="btn-secondary" onclick="closeModal(\'modal-claim\')">Anuluj</button>';
-    h += '<button class="btn-primary" id="claim-submit" onclick="grSubmitClaim(\'' + giftId + '\')">Potwierdzam</button>';
-    h += '</div></div>';
+    h+='<p class="intro-text">Waszą obecność na naszym ślubie uważamy za najpiękniejszy prezent. Jeśli jednak chcielibyście nas dodatkowo obdarować, poniżej znajdziecie listę rzeczy, o których wspólnie marzymy. Rezerwacja jest w pełni anonimowa — nie zobaczymy, kto co wybrał. Do droższych prezentów można dołączyć we\u00a0dwoje lub w\u00a0grupie.</p>';
 
-    openModal('modal-claim', h);
-    setTimeout(function() { var el = document.getElementById('claim-name'); if (el) el.focus(); }, 100);
-  };
+    h+='<div class="stats-row">';
+    h+='<div class="stat-item"><span class="stat-number">'+tot+'</span><span class="stat-label">propozycji</span></div>';
+    h+='<span class="stat-sep">·</span>';
+    h+='<div class="stat-item"><span class="stat-number">'+cl+'</span><span class="stat-label">zarezerwowanych</span></div>';
+    h+='<span class="stat-sep">·</span>';
+    h+='<div class="stat-item"><span class="stat-number">'+(tot-cl)+'</span><span class="stat-label">wolnych</span></div>';
+    h+='</div>';
 
-  window.grSubmitClaim = async function(giftId) {
-    var name = (document.getElementById('claim-name').value || '').trim();
-    var contact = (document.getElementById('claim-contact').value || '').trim();
-    if (!name || !contact) return;
+    if(apiOk) h+='<button class="reservations-btn" onclick="grMyRes()">Moje rezerwacje</button>';
+    h+='<div class="sep"></div>';
 
-    var btn = document.getElementById('claim-submit');
-    btn.disabled = true; btn.textContent = 'Zapisuję…';
+    h+='<div class="filters">';
+    CATS.forEach(function(c){h+='<button class="filter-btn'+(c.key===activeCat?' active':'')+'" onclick="grFilt(\''+c.key+'\')">'+c.label+'</button>';});
+    h+='</div>';
 
-    var code = myCode || String(Math.floor(1000 + Math.random() * 9000));
-
-    try {
-      var res = await api({ action: 'signup', giftId: giftId, name: name, contact: contact, code: code });
-      if (res.error) { alert(res.error); btn.disabled = false; btn.textContent = 'Potwierdzam'; return; }
-      if (!myCode) myCode = code;
-      closeModal('modal-claim');
-      grShowSuccess(code, giftId);
-      await loadGifts();
-    } catch (err) {
-      alert('Wystąpił błąd. Spróbuj ponownie.');
-      btn.disabled = false; btn.textContent = 'Potwierdzam';
-    }
-  };
-
-  function grShowSuccess(code, giftId) {
-    var g = gifts.filter(function(x) { return x.id === giftId; })[0];
-    var h = '<div style="text-align:center">';
-    h += '<div class="modal-emoji">🎉</div>';
-    h += '<h3 class="modal-title">Zapisano!</h3>';
-    h += '<p class="modal-desc">Twoja rezerwacja na <strong>' + (g ? g.name : '') + '</strong> została zapisana.</p>';
-    h += '<div class="code-display"><p class="code-display-label">Twój kod rezerwacji</p>';
-    h += '<p class="code-display-value">' + code + '</p></div>';
-    h += '<p class="modal-note">Zachowaj ten kod! Pozwoli Ci przeglądać rezerwacje, kontaktować się ze współkupującymi i anulować rezerwację.</p>';
-    h += '<button class="btn-primary" onclick="closeModal(\'modal-success\')">Rozumiem</button>';
-    h += '</div>';
-    openModal('modal-success', h);
+    h+='<div class="gift-grid">';
+    fl.forEach(function(g){
+      var n=g.signupCount||0, mine=myGiftIds.indexOf(g.id)>=0;
+      h+='<div class="gift-card"><div class="gift-emoji">'+g.image+'</div><div class="gift-body">';
+      h+='<h3 class="gift-name">'+g.name+'</h3><p class="gift-desc">'+g.description+'</p>';
+      h+='<div class="gift-meta">'+(n>0?'<span class="gift-badge">'+pL(n)+' '+pV(n)+'</span>':'<span class="gift-no-one">Nikt jeszcze się nie zapisał</span>')+'</div>';
+      if(g.link) h+='<a href="'+g.link+'" target="_blank" rel="noopener" class="gift-link">Zobacz produkt ↗</a>';
+      if(mine) h+='<div class="gift-mine">Jesteś zapisany/a ✓</div>';
+      h+='<div class="gift-actions">';
+      if(!mine&&apiOk) h+='<button class="btn-primary" onclick="grClaim(\''+g.id+'\')">'+(n>0?'Dołącz':'Rezerwuję')+'</button>';
+      if(mine&&n>1) h+='<button class="btn-secondary" style="font-size:.62rem;padding:.4rem .9rem" onclick="grCoBuy(\''+g.id+'\')">Współkupujący ('+(n-1)+')</button>';
+      h+='</div></div></div>';
+    });
+    h+='</div>';
+    document.getElementById('registry-root').innerHTML=h;
   }
 
-  // ══════════════════════════
+  window.grFilt=function(c){activeCat=c;render();};
+
+  // ══════════════════════════════════════
+  //  CLAIM
+  // ══════════════════════════════════════
+  window.grClaim=function(id){
+    var g=gifts.filter(function(x){return x.id===id;})[0]; if(!g) return;
+    var n=g.signupCount||0;
+    var h='<div style="text-align:center"><div class="modal-emoji">'+g.image+'</div>';
+    h+='<h3 class="modal-title">'+g.name+'</h3><p class="modal-desc">'+g.description+'</p>';
+    if(n>0) h+='<p style="font-size:.72rem;color:var(--accent);font-style:italic;margin:0 0 1rem">Aktualnie '+pL(n)+' '+(n===1?'jest zapisana':n<5?'są zapisane':'jest zapisanych')+'</p>';
+    h+='<input class="modal-input" id="c-name" placeholder="Imię i nazwisko">';
+    h+='<input class="modal-input" id="c-contact" placeholder="E-mail lub telefon (do koordynacji zakupu)">';
+    h+='<p class="modal-note">Dane kontaktowe będą widoczne wyłącznie dla innych osób zapisanych na ten sam prezent — w celu koordynacji zakupu. Para Młoda ich nie zobaczy.</p>';
+    h+='<div class="modal-actions"><button class="btn-secondary" onclick="closeM(\'modal-claim\')">Anuluj</button>';
+    h+='<button class="btn-primary" id="c-sub" onclick="grDoSign(\''+id+'\')">Potwierdzam</button></div></div>';
+    openM('modal-claim',h);
+    setTimeout(function(){var e=document.getElementById('c-name');if(e)e.focus();},100);
+  };
+
+  window.grDoSign=async function(id){
+    var nm=(document.getElementById('c-name').value||'').trim();
+    var ct=(document.getElementById('c-contact').value||'').trim();
+    if(!nm||!ct)return;
+    var b=document.getElementById('c-sub');b.disabled=true;b.textContent='Zapisuję…';
+    var code=myCode||String(Math.floor(1000+Math.random()*9000));
+    try{
+      var r=await api({action:'signup',giftId:id,name:nm,contact:ct,code:code});
+      if(r.error){alert(r.error);b.disabled=false;b.textContent='Potwierdzam';return;}
+      if(!myCode)myCode=code;closeM('modal-claim');
+      var g=gifts.filter(function(x){return x.id===id;})[0];
+      var h='<div style="text-align:center"><div class="modal-emoji">🎉</div><h3 class="modal-title">Zapisano!</h3>';
+      h+='<p class="modal-desc">Twoja rezerwacja na <strong>'+(g?g.name:'')+'</strong> została zapisana.</p>';
+      h+='<div class="code-display"><p class="code-display-label">Twój kod rezerwacji</p><p class="code-display-value">'+code+'</p></div>';
+      h+='<p class="modal-note">Zachowaj ten kod! Pozwoli Ci przeglądać rezerwacje, kontaktować się ze współkupującymi i anulować rezerwację.</p>';
+      h+='<button class="btn-primary" onclick="closeM(\'modal-success\')">Rozumiem</button></div>';
+      openM('modal-success',h);await load();
+    }catch(e){alert('Wystąpił błąd.');b.disabled=false;b.textContent='Potwierdzam';}
+  };
+
+  // ══════════════════════════════════════
   //  MY RESERVATIONS
-  // ══════════════════════════
-  window.grMyReservations = function() {
-    if (myCode) { grShowMyList(); } else { grShowCodeEntry(); }
-  };
+  // ══════════════════════════════════════
+  window.grMyRes=function(){myCode?showList():showCodeIn();};
 
-  function grShowCodeEntry() {
-    var h = '<div style="text-align:center">';
-    h += '<h3 class="modal-title">Wpisz swój kod</h3>';
-    h += '<p class="modal-desc">Podaj 4-cyfrowy kod, który otrzymałeś/aś przy rezerwacji.</p>';
-    h += '<input class="modal-input code-style" id="code-input" placeholder="····" maxlength="4">';
-    h += '<div class="modal-actions">';
-    h += '<button class="btn-secondary" onclick="closeModal(\'modal-code\')">Anuluj</button>';
-    h += '<button class="btn-primary" onclick="grSubmitCode()">Dalej</button>';
-    h += '</div></div>';
-    openModal('modal-code', h);
-    setTimeout(function() {
-      var el = document.getElementById('code-input');
-      if (!el) return;
-      el.focus();
-      el.addEventListener('input', function() { this.value = this.value.replace(/\D/g, '').slice(0, 4); });
-      el.addEventListener('keydown', function(e) { if (e.key === 'Enter') grSubmitCode(); });
-    }, 100);
+  function showCodeIn(){
+    var h='<div style="text-align:center"><h3 class="modal-title">Wpisz swój kod</h3>';
+    h+='<p class="modal-desc">Podaj 4-cyfrowy kod, który otrzymałeś/aś przy rezerwacji.</p>';
+    h+='<input class="modal-input code-style" id="code-in" placeholder="····" maxlength="4">';
+    h+='<div class="modal-actions"><button class="btn-secondary" onclick="closeM(\'modal-code\')">Anuluj</button>';
+    h+='<button class="btn-primary" onclick="grCodeGo()">Dalej</button></div></div>';
+    openM('modal-code',h);
+    setTimeout(function(){var e=document.getElementById('code-in');if(!e)return;e.focus();
+      e.oninput=function(){this.value=this.value.replace(/\D/g,'').slice(0,4);};
+      e.onkeydown=function(ev){if(ev.key==='Enter')grCodeGo();};},100);
   }
-
-  window.grSubmitCode = async function() {
-    var code = (document.getElementById('code-input').value || '').trim();
-    if (code.length < 4) return;
-    try {
-      var res = await api({ action: 'verifyCode', code: code });
-      if (res.exists) {
-        myCode = code;
-        closeModal('modal-code');
-        var r2 = await api({ action: 'myReservations', code: code });
-        myGiftIds = r2.giftIds || [];
-        render();
-        grShowMyList();
-      } else { alert('Nie znaleziono rezerwacji z tym kodem.'); }
-    } catch { alert('Błąd połączenia.'); }
+  window.grCodeGo=async function(){
+    var c=(document.getElementById('code-in').value||'').trim();if(c.length<4)return;
+    var r=await api({action:'verifyCode',code:c});
+    if(r.exists){myCode=c;closeM('modal-code');var r2=await api({action:'myReservations',code:c});myGiftIds=r2.giftIds||[];render();showList();}
+    else alert('Nie znaleziono rezerwacji z tym kodem.');
   };
 
-  async function grShowMyList() {
-    var res = await api({ action: 'myReservations', code: myCode });
-    myGiftIds = res.giftIds || [];
-    var myGifts = gifts.filter(function(g) { return myGiftIds.indexOf(g.id) >= 0; });
-
-    var h = '<button class="modal-close" onclick="closeModal(\'modal-reservations\')">✕</button>';
-    h += '<h3 class="modal-title">Moje rezerwacje</h3>';
-
-    if (!myGifts.length) {
-      h += '<p style="font-size:.82rem;color:var(--muted);font-style:italic">Nie masz jeszcze żadnych rezerwacji.</p>';
-    } else {
-      myGifts.forEach(function(g) {
-        var others = (g.signupCount || 0) - 1;
-        h += '<div class="contact-card">';
-        h += '<div style="display:flex;align-items:center;gap:.7rem">';
-        h += '<span style="font-size:1.4rem">' + g.image + '</span>';
-        h += '<div><div class="contact-card-name" style="font-size:.95rem">' + g.name + '</div>';
-        if (others > 0) h += '<div style="font-size:.72rem;color:var(--accent);margin-top:.15rem">+ ' + pL(others) + '</div>';
-        h += '</div></div>';
-        h += '<div style="display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap">';
-        if (others > 0) {
-          h += '<button class="btn-secondary" style="font-size:.6rem;padding:.3rem .7rem" onclick="closeModal(\'modal-reservations\');grShowCobuyers(\'' + g.id + '\')">Współkupujący</button>';
-        }
-        h += '<button class="btn-secondary btn-danger" style="font-size:.6rem;padding:.3rem .7rem" onclick="grCancelReservation(\'' + g.id + '\')">Anuluj rezerwację</button>';
-        h += '</div></div>';
-      });
-    }
-    openModal('modal-reservations', '<div class="modal-box wide" onclick="event.stopPropagation()">' + h + '</div>');
-    // Fix: we wrapped in modal-box already via openModal, remove double wrap
-    document.getElementById('modal-reservations').innerHTML = '';
-    var el = document.getElementById('modal-reservations');
-    el.innerHTML = '<div class="modal-box wide" onclick="event.stopPropagation()" style="position:relative">' + h + '</div>';
-    el.classList.add('open');
-    el.onclick = function(e) { if (e.target === el) closeModal('modal-reservations'); };
+  async function showList(){
+    var r=await api({action:'myReservations',code:myCode});myGiftIds=r.giftIds||[];
+    var mg=gifts.filter(function(g){return myGiftIds.indexOf(g.id)>=0;});
+    var h='<button class="modal-close" onclick="closeM(\'modal-reservations\')">✕</button>';
+    h+='<h3 class="modal-title">Moje rezerwacje</h3>';
+    if(!mg.length)h+='<p style="font-size:.82rem;color:var(--muted);font-style:italic">Nie masz jeszcze żadnych rezerwacji.</p>';
+    else mg.forEach(function(g){
+      var ot=(g.signupCount||0)-1;
+      h+='<div class="contact-card"><div style="display:flex;align-items:center;gap:.7rem"><span style="font-size:1.4rem">'+g.image+'</span><div>';
+      h+='<div class="contact-card-name" style="font-size:.95rem">'+g.name+'</div>';
+      if(ot>0)h+='<div style="font-size:.72rem;color:var(--accent);margin-top:.15rem">+ '+pL(ot)+'</div>';
+      h+='</div></div><div style="display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap">';
+      if(ot>0)h+='<button class="btn-secondary" style="font-size:.6rem;padding:.3rem .7rem" onclick="closeM(\'modal-reservations\');grCoBuy(\''+g.id+'\')">Współkupujący</button>';
+      h+='<button class="btn-secondary btn-danger" style="font-size:.6rem;padding:.3rem .7rem" onclick="grDel(\''+g.id+'\')">Anuluj</button></div></div>';
+    });
+    openM('modal-reservations',h,true);
   }
+  window.grDel=async function(id){if(!confirm('Anulować rezerwację?'))return;await api({action:'cancel',giftId:id,code:myCode});closeM('modal-reservations');await load();};
 
-  window.grCancelReservation = async function(giftId) {
-    if (!confirm('Czy na pewno chcesz anulować tę rezerwację?')) return;
-    await api({ action: 'cancel', giftId: giftId, code: myCode });
-    closeModal('modal-reservations');
-    await loadGifts();
-  };
-
-  // ══════════════════════════
+  // ══════════════════════════════════════
   //  CO-BUYERS
-  // ══════════════════════════
-  window.grShowCobuyers = async function(giftId) {
-    var g = gifts.filter(function(x) { return x.id === giftId; })[0];
-    if (!g || !myCode) return;
-    var res = await api({ action: 'coContributors', giftId: giftId, code: myCode });
-    if (res.error) { alert(res.error); return; }
+  // ══════════════════════════════════════
+  window.grCoBuy=async function(id){
+    var g=gifts.filter(function(x){return x.id===id;})[0];if(!g||!myCode)return;
+    var r=await api({action:'coContributors',giftId:id,code:myCode});if(r.error){alert(r.error);return;}
+    var all=r.contributors||[],mine=all.filter(function(c){return c.code===myCode;})[0],oth=all.filter(function(c){return c.code!==myCode;});
+    var h='<button class="modal-close" onclick="closeM(\'modal-cobuyers\')">✕</button>';
+    h+='<h3 class="modal-title">Współkupujący</h3>';
+    h+='<p class="modal-desc">Dane osób zapisanych na <strong>'+g.name+'</strong>. Ustalcie, kto kupi prezent.</p>';
+    if(mine){h+='<div class="contact-card highlighted"><div class="contact-card-label">Ty</div><div class="contact-card-name">'+mine.name+'</div><div class="contact-card-info">'+mine.contact+'</div></div>';}
+    if(oth.length)oth.forEach(function(c){h+='<div class="contact-card"><div class="contact-card-name">'+c.name+'</div><div class="contact-card-info">'+c.contact+'</div></div>';});
+    else h+='<p style="font-size:.78rem;color:var(--accent);font-style:italic">Na razie tylko Ty jesteś zapisany/a.</p>';
+    openM('modal-cobuyers',h,true);
+  };
 
-    var all = res.contributors || [];
-    var mine = all.filter(function(c) { return c.code === myCode; })[0];
-    var others = all.filter(function(c) { return c.code !== myCode; });
+  // ══════════════════════════════════════
+  //  ADMIN PANEL
+  // ══════════════════════════════════════
+  window.grAdminGate=function(){
+    if(adminAuth){grAdminOpen();return;}
+    var h='<div style="text-align:center"><h3 class="modal-title">Panel administracyjny</h3>';
+    h+='<input class="modal-input" type="password" id="admin-pwd" placeholder="Hasło…">';
+    h+='<div class="modal-actions"><button class="btn-secondary" onclick="closeM(\'modal-admin-pwd\')">Anuluj</button>';
+    h+='<button class="btn-primary" onclick="grAdminLogin()">Dalej</button></div></div>';
+    openM('modal-admin-pwd',h);
+    setTimeout(function(){var e=document.getElementById('admin-pwd');if(e){e.focus();e.onkeydown=function(ev){if(ev.key==='Enter')grAdminLogin();};}},100);
+  };
 
-    var h = '<button class="modal-close" onclick="closeModal(\'modal-cobuyers\')">✕</button>';
-    h += '<h3 class="modal-title">Współkupujący</h3>';
-    h += '<p class="modal-desc">Dane kontaktowe osób zapisanych na <strong>' + g.name + '</strong>. Ustalcie między sobą, kto kupi prezent.</p>';
+  window.grAdminLogin=function(){
+    var pwd=(document.getElementById('admin-pwd').value||'').trim();
+    if(pwd==='soragna2026'){adminAuth=true;closeM('modal-admin-pwd');grAdminOpen();}
+    else alert('Nieprawidłowe hasło.');
+  };
 
-    if (mine) {
-      h += '<div class="contact-card highlighted"><div class="contact-card-label">Ty</div>';
-      h += '<div class="contact-card-name">' + mine.name + '</div>';
-      h += '<div class="contact-card-info">' + mine.contact + '</div></div>';
-    }
-    if (others.length) {
-      others.forEach(function(c) {
-        h += '<div class="contact-card"><div class="contact-card-name">' + c.name + '</div>';
-        h += '<div class="contact-card-info">' + c.contact + '</div></div>';
-      });
-    } else {
-      h += '<p style="font-size:.78rem;color:var(--accent);font-style:italic">Na razie tylko Ty jesteś zapisany/a.</p>';
-    }
+  window.grAdminOpen=function(){
+    // Deep copy gifts for editing
+    var editGifts=JSON.parse(JSON.stringify(gifts));
+    window._adminGifts=editGifts;
+    renderAdmin();
+  };
 
-    var el = document.getElementById('modal-cobuyers');
-    el.innerHTML = '<div class="modal-box wide" onclick="event.stopPropagation()" style="position:relative">' + h + '</div>';
-    el.classList.add('open');
-    el.onclick = function(e) { if (e.target === el) closeModal('modal-cobuyers'); };
+  function renderAdmin(){
+    var eg=window._adminGifts;
+    var h='<button class="modal-close" onclick="closeM(\'modal-admin\')">✕</button>';
+    h+='<h3 class="modal-title">Zarządzanie listą</h3>';
+    h+='<p class="modal-note" style="margin-bottom:1rem">Dane gości są anonimowe — widoczna jest tylko liczba osób.</p>';
+
+    h+='<div class="admin-scroll">';
+    eg.forEach(function(g,i){
+      var n=g.signupCount||0;
+      h+='<div class="admin-row"><div class="admin-fields">';
+      h+='<input class="admin-input" value="'+esc(g.name)+'" onchange="window._adminGifts['+i+'].name=this.value" placeholder="Nazwa">';
+      h+='<div class="admin-input-row">';
+      h+='<select class="admin-select" onchange="window._adminGifts['+i+'].category=this.value">';
+      CATS.forEach(function(c){if(c.key!=='wszystko')h+='<option value="'+c.key+'"'+(g.category===c.key?' selected':'')+'>'+c.label+'</option>';});
+      h+='</select>';
+      h+='<input class="admin-input" style="width:50px" value="'+esc(g.image)+'" onchange="window._adminGifts['+i+'].image=this.value" placeholder="Emoji">';
+      h+='</div>';
+      h+='<input class="admin-input" value="'+esc(g.description)+'" onchange="window._adminGifts['+i+'].description=this.value" placeholder="Opis">';
+      h+='<input class="admin-input" value="'+esc(g.link||'')+'" onchange="window._adminGifts['+i+'].link=this.value" placeholder="Link do produktu (opcjonalnie)">';
+      if(n>0) h+='<div class="admin-info">Zapisanych: '+pL(n)+'</div>';
+      h+='</div>';
+      h+='<button class="admin-remove" onclick="window._adminGifts.splice('+i+',1);renderAdmin()">Usuń</button>';
+      h+='</div>';
+    });
+    h+='</div>';
+
+    h+='<button class="btn-secondary" style="width:100%;margin-bottom:.6rem" onclick="grAdminAdd()">+ Dodaj prezent</button>';
+    h+='<button class="btn-primary" style="width:100%" onclick="grAdminSave()">Zapisz zmiany</button>';
+
+    openM('modal-admin',h,true);
+  }
+  window.renderAdmin=renderAdmin;
+
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+  window.grAdminAdd=function(){
+    window._adminGifts.push({id:String(Date.now()),name:'',description:'',category:'dom',image:'🎁',link:'',signupCount:0});
+    renderAdmin();
+    // Scroll to bottom of admin list
+    setTimeout(function(){var s=document.querySelector('.admin-scroll');if(s)s.scrollTop=s.scrollHeight;},50);
+  };
+
+  window.grAdminSave=async function(){
+    try{
+      var r=await apiPost({action:'adminUpdateGifts',password:'soragna2026',gifts:window._adminGifts});
+      if(r.error){alert(r.error);return;}
+      closeM('modal-admin');
+      await load();
+    }catch(e){alert('Błąd zapisu. Spróbuj ponownie.');}
   };
 
   // ── Init ──
-  loadGifts();
+  load();
 
 })();
 </script>
