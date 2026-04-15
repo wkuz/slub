@@ -61,8 +61,13 @@
   }
   .hero-slide:nth-child(1) { animation-delay: 0s;  background-image: url('photos/hero-1.jpg'); }
   .hero-slide:nth-child(2) { animation-delay: 7s;  background-image: url('photos/hero-2.jpg'); background-position: center 65%; }
-  .hero-slide:nth-child(3) { animation-delay: 14s; background-image: url('photos/hero-3.jpg'); background-position: center 75%; }
-  .hero-slide:nth-child(4) { animation-delay: 21s; background-image: url('photos/hero-4.jpg'); background-position: center 28%; }
+  .hero-slide:nth-child(3) { animation-delay: 14s; background-image: url('photos/hero-3.jpg'); background-position: center 25%; }
+  .hero-slide:nth-child(4) { animation-delay: 21s; background-image: url('photos/hero-4.jpg'); background-position: center 20%; }
+
+  /* On mobile, hero-2 needs the original framing — switch back at small widths */
+  @media (max-width: 720px) {
+    .hero-slide:nth-child(2) { background-position: center 30%; }
+  }
 
   @keyframes heroSlideFade {
     0%   { opacity: 0; transform: scale(1.04); }
@@ -249,7 +254,7 @@
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 100;
-    padding: 1rem 2rem;
+    padding: 1.3rem 2.2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -262,27 +267,27 @@
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     color: var(--accent);
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     letter-spacing: 0.05em;
     white-space: nowrap;
   }
 
   .nav-links {
     display: flex;
-    gap: 1.6rem;
+    gap: 2rem;
     list-style: none;
     flex-wrap: wrap;
   }
 
   .nav-links a {
-    color: var(--muted);
+    color: var(--accent);
     text-decoration: none;
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     transition: color 0.3s;
   }
-  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover { color: var(--accent-light); }
 
   /* ── SECTIONS ── */
   section {
@@ -720,10 +725,11 @@
     .accom-grid { grid-template-columns: 1fr; }
 
     /* Compact nav */
-    nav { padding: 0.7rem 1rem; }
-    .nav-logo { font-size: 1rem; }
-    .nav-links { gap: 0.9rem; }
-    .nav-links a { font-size: 0.6rem; letter-spacing: 0.12em; }
+    /* Nav stays roomy on mobile, just slightly tighter spacing */
+    nav { padding: 1rem 1.2rem; }
+    .nav-logo { font-size: 1.3rem; }
+    .nav-links { gap: 1.1rem; }
+    .nav-links a { font-size: 0.75rem; letter-spacing: 0.15em; }
 
     /* Timeline tighter on small screens */
     .day-block { margin-bottom: 2.8rem; }
@@ -754,10 +760,11 @@
     section { padding: 3.5rem 1.1rem; }
 
     /* Nav: bring logo center, smaller links */
-    nav { padding: 0.6rem 0.9rem; }
-    .nav-logo { font-size: 0.95rem; }
-    .nav-links { gap: 0.6rem; }
-    .nav-links a { font-size: 0.55rem; letter-spacing: 0.08em; }
+    /* Nav: keep readable on phones */
+    nav { padding: 0.9rem 1rem; }
+    .nav-logo { font-size: 1.2rem; }
+    .nav-links { gap: 0.8rem; }
+    .nav-links a { font-size: 0.7rem; letter-spacing: 0.12em; }
 
     /* Hero scaling */
     .hero { padding: 1.5rem 1rem; }
@@ -792,8 +799,8 @@
 
   /* ── RESPONSIVE: very small ── */
   @media (max-width: 360px) {
-    .nav-links { gap: 0.45rem; }
-    .nav-links a { font-size: 0.5rem; letter-spacing: 0.05em; }
+    .nav-links { gap: 0.6rem; }
+    .nav-links a { font-size: 0.62rem; letter-spacing: 0.08em; }
     .count-number { font-size: 1.7rem; }
   }
 </style>
