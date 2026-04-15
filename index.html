@@ -40,30 +40,82 @@
     overflow: hidden;
     padding: 2rem;
     text-align: center;
-    background: #f0e6d3;
+    background: #1a1008;
+  }
+
+  /* Slideshow layer */
+  .hero-slides {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: heroSlideFade 28s infinite;
+    will-change: opacity, transform;
+  }
+  .hero-slide:nth-child(1) { animation-delay: 0s;  background-image: url('photos/hero-1.jpg'); }
+  .hero-slide:nth-child(2) { animation-delay: 7s;  background-image: url('photos/hero-2.jpg'); background-position: center 30%; }
+  .hero-slide:nth-child(3) { animation-delay: 14s; background-image: url('photos/hero-3.jpg'); }
+  .hero-slide:nth-child(4) { animation-delay: 21s; background-image: url('photos/hero-4.jpg'); background-position: center 35%; }
+
+  @keyframes heroSlideFade {
+    0%   { opacity: 0; transform: scale(1.04); }
+    4%   { opacity: 1; }
+    25%  { opacity: 1; transform: scale(1.0); }
+    29%  { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  /* Overlay: warm sepia tone + dark vignette for legibility */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at center, rgba(20,12,4,0.25) 0%, rgba(20,12,4,0.55) 100%),
+      linear-gradient(180deg, rgba(20,12,4,0.35) 0%, rgba(20,12,4,0.15) 35%, rgba(20,12,4,0.15) 65%, rgba(20,12,4,0.6) 100%),
+      linear-gradient(45deg, rgba(107,58,20,0.15), rgba(20,12,4,0.1));
   }
 
   .hero::before {
     content: '';
     position: absolute;
     inset: 0;
+    z-index: 2;
     background:
-      radial-gradient(ellipse 70% 50% at 50% 95%, rgba(138,96,48,0.1) 0%, transparent 65%),
-      radial-gradient(ellipse 40% 35% at 10% 10%, rgba(201,169,110,0.13) 0%, transparent 60%),
-      radial-gradient(ellipse 45% 35% at 90% 5%,  rgba(201,169,110,0.1) 0%, transparent 60%);
+      radial-gradient(ellipse 70% 50% at 50% 95%, rgba(107,58,20,0.25) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 35% at 10% 10%, rgba(201,169,110,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 35% at 90% 5%,  rgba(201,169,110,0.13) 0%, transparent 60%);
     pointer-events: none;
   }
 
   .glow {
     position: absolute;
+    z-index: 2;
     border-radius: 50%;
     filter: blur(90px);
     pointer-events: none;
     animation: flicker 4s ease-in-out infinite alternate;
   }
-  .glow-1 { width: 380px; height: 380px; background: rgba(201,169,110,0.18); bottom: 8%; left: 4%; animation-delay: 0s; }
-  .glow-2 { width: 260px; height: 260px; background: rgba(180,140,80,0.13); bottom: 18%; right: 6%; animation-delay: 1.5s; }
-  .glow-3 { width: 180px; height: 180px; background: rgba(201,169,110,0.1);  top: 22%; left: 36%; animation-delay: 0.8s; }
+  .glow-1 { width: 380px; height: 380px; background: rgba(201,169,110,0.22); bottom: 8%; left: 4%; animation-delay: 0s; }
+  .glow-2 { width: 260px; height: 260px; background: rgba(180,140,80,0.16); bottom: 18%; right: 6%; animation-delay: 1.5s; }
+  .glow-3 { width: 180px; height: 180px; background: rgba(201,169,110,0.13); top: 22%; left: 36%; animation-delay: 0.8s; }
+
+  /* All hero text content needs to sit above the slideshow */
+  .hero-ornament,
+  .hero-names,
+  .divider,
+  .hero-date,
+  .hero-location,
+  .countdown,
+  .hero-scroll { position: relative; z-index: 3; }
 
   @keyframes flicker {
     0%   { opacity: 0.55; transform: scale(1); }
@@ -75,12 +127,13 @@
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: clamp(0.8rem, 2vw, 1rem);
-    color: var(--accent);
+    color: #e8d4ad;
     letter-spacing: 0.3em;
     text-transform: uppercase;
     margin-bottom: 1.5rem;
     position: relative;
     opacity: 0;
+    text-shadow: 0 1px 8px rgba(20,12,4,0.5);
     animation: fadeUp 1s 0.3s forwards;
   }
 
@@ -90,15 +143,16 @@
     font-size: clamp(3rem, 12vw, 8rem);
     line-height: 0.9;
     letter-spacing: -0.01em;
-    color: var(--text);
+    color: #faefd9;
     position: relative;
     opacity: 0;
+    text-shadow: 0 2px 24px rgba(20,12,4,0.55), 0 0 60px rgba(20,12,4,0.35);
     animation: fadeUp 1.2s 0.5s forwards;
   }
 
   .hero-names .and {
     font-style: italic;
-    color: var(--accent);
+    color: #e8c98a;
     font-size: 0.6em;
     display: block;
     margin: 0.1em 0;
@@ -109,9 +163,10 @@
     font-size: clamp(0.75rem, 2vw, 0.95rem);
     letter-spacing: 0.4em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: #d9c39a;
     position: relative;
     opacity: 0;
+    text-shadow: 0 1px 6px rgba(20,12,4,0.5);
     animation: fadeUp 1.2s 0.9s forwards;
   }
 
@@ -120,15 +175,16 @@
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: clamp(1rem, 3vw, 1.5rem);
-    color: var(--accent-light);
+    color: #e8c98a;
     opacity: 0;
+    text-shadow: 0 1px 8px rgba(20,12,4,0.55);
     animation: fadeUp 1.2s 1.1s forwards;
   }
 
   .divider {
     width: 1px;
     height: 80px;
-    background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+    background: linear-gradient(to bottom, transparent, #e8c98a, transparent);
     margin: 2.5rem auto;
     opacity: 0;
     animation: fadeIn 1.5s 1.3s forwards;
@@ -138,9 +194,10 @@
     font-size: 0.7rem;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: #d9c39a;
     text-decoration: none;
     opacity: 0;
+    text-shadow: 0 1px 6px rgba(20,12,4,0.5);
     animation: fadeUp 1s 1.8s forwards;
   }
 
@@ -166,23 +223,25 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 3rem;
     font-weight: 300;
-    color: var(--accent-light);
+    color: #e8c98a;
     line-height: 1;
     display: block;
+    text-shadow: 0 2px 12px rgba(20,12,4,0.55);
   }
   .count-label {
     font-size: 0.65rem;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: #d9c39a;
     margin-top: 0.4rem;
+    text-shadow: 0 1px 6px rgba(20,12,4,0.5);
   }
   .count-sep {
     font-family: 'Cormorant Garamond', serif;
     font-size: 2rem;
-    color: var(--accent);
+    color: #e8c98a;
     align-self: center;
-    opacity: 0.35;
+    opacity: 0.5;
   }
 
   /* ── NAV ── */
@@ -755,6 +814,14 @@
 
 <!-- HERO -->
 <div class="hero">
+  <div class="hero-slides">
+    <div class="hero-slide"></div>
+    <div class="hero-slide"></div>
+    <div class="hero-slide"></div>
+    <div class="hero-slide"></div>
+  </div>
+  <div class="hero-overlay"></div>
+
   <div class="glow glow-1"></div>
   <div class="glow glow-2"></div>
   <div class="glow glow-3"></div>
@@ -990,7 +1057,7 @@
     const diff = target - now;
     if (diff <= 0) {
       document.getElementById('countdown').innerHTML =
-        '<p style="font-family:\'Cormorant Garamond\',serif;font-style:italic;color:var(--accent-light);font-size:1.5rem;">To jest ten dzień! ✨</p>';
+        '<p style="font-family:\'Cormorant Garamond\',serif;font-style:italic;color:#e8c98a;font-size:1.5rem;text-shadow:0 2px 12px rgba(20,12,4,0.55);">To jest ten dzień! ✨</p>';
       return;
     }
     const days  = Math.floor(diff / 86400000);
