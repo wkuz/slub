@@ -207,7 +207,11 @@
     var fl=activeCat==='wszystko'?gifts:gifts.filter(function(g){return g.category===activeCat;});
     var tot=gifts.length, cl=gifts.filter(function(g){return(g.signupCount||0)>0;}).length;
     var h='';
-    h+='<p class="intro-text">Waszą obecność na naszym ślubie uważamy za najpiękniejszy prezent. Jeśli jednak chcielibyście nas dodatkowo obdarować, poniżej znajdziecie listę rzeczy, o których wspólnie marzymy. Rezerwacja jest w pełni anonimowa \u2014 nie zobaczymy, kto co wybrał. Do droższych prezentów można dołączyć we\u00a0dwoje lub w\u00a0grupie.</p>';
+    h+='<p class="intro-text">Drodzy Goście, 
+Wasza obecność na naszym ślubie, zwłaszcza w tak wyjątkowym miejscu, jest dla nas największym zaszczytem i najpiękniejszym darem. W pełni doceniamy trud i zaangażowanie związane z podróżą — dlatego nie czujemy się w żaden sposób uprawnieni do oczekiwania dodatkowych upominków. 
+Jeśli zechcecie nas obdarować, będziemy wdzięczni za gest, który w sposób możliwie najbardziej swobodny i niewymuszony pozwoli nam wspólnie kształtować naszą przyszłość oraz realizować plany, które są nam szczególnie bliskie.
+Z myślą o osobach, które skłaniają się ku bardziej tradycyjnej formie podarunku, przygotowaliśmy listę inspiracji. 
+Uprzejmie prosimy, aby ewentualne prezenty rzeczowe — o ile taka forma zostanie wybrana — zostały przesłane bezpośrednio na <b>ul. Struga 22/36, 90-120 Łódź</b>. W dniach od 15.06.2026 do 30.06.2026 <b>nie będziemy mieli możliwości odbioru</b> paczek. Poniższa interaktywna lista daje możliwość ewentualnego łączenia się w grupy przy wyborze podarunku.\u2014</p>';
     h+='<div class="stats-row"><div class="stat-item"><span class="stat-number">'+tot+'</span><span class="stat-label">propozycji</span></div><span class="stat-sep">\u00b7</span><div class="stat-item"><span class="stat-number">'+cl+'</span><span class="stat-label">zarezerwowanych</span></div><span class="stat-sep">\u00b7</span><div class="stat-item"><span class="stat-number">'+(tot-cl)+'</span><span class="stat-label">wolnych</span></div></div>';
     if(apiOk) h+='<button class="reservations-btn" onclick="grMyRes()">Moje rezerwacje</button>';
     h+='<div class="sep"></div><div class="filters">';
