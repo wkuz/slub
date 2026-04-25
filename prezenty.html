@@ -217,11 +217,26 @@
       var n=g.signupCount||0, mine=myGiftIds.indexOf(g.id)>=0;
       h+='<div class="gift-card"><div class="gift-emoji">'+g.image+'</div><div class="gift-body">';
       h+='<h3 class="gift-name">'+esc(g.name)+'</h3><p class="gift-desc">'+esc(g.description)+'</p>';
-      h+='<div class="gift-meta">'+(n>0?'<span class="gift-badge">'+pL(n)+' '+pV(n)+'</span>':'<span class="gift-no-one">Nikt jeszcze się nie zapisał</span>')+'</div>';
+      h+='<div class="gift-meta">';
+      if(g.solo){
+        h+='<span class="gift-badge">Zarezerwowany \u2713</span>';
+      }else if(n>0){
+        h+='<span class="gift-badge">'+pL(n)+' '+pV(n)+'</span>';
+      }else{
+        h+='<span class="gift-no-one">Nikt jeszcze się nie zapisał</span>';
+      }
+      h+='</div>';
       if(g.link)h+='<a href="'+esc(g.link)+'" target="_blank" rel="noopener" class="gift-link">Zobacz produkt \u2197</a>';
       if(mine)h+='<div class="gift-mine">Jesteś zapisany/a \u2713</div>';
       h+='<div class="gift-actions">';
-      if(!mine&&apiOk)h+='<button class="btn-primary" onclick="grClaim(\''+g.id+'\')">'+(n>0?'Dołącz':'Rezerwuję')+'</button>';
+      if(!mine&&apiOk&&!g.solo){
+        if(n>0){
+          h+='<button class="btn-primary" onclick="grClaim(\''+g.id+'\',false)">Dołącz do składki</button>';
+        }else{
+          h+='<button class="btn-primary" onclick="grClaim(\''+g.id+'\',true)">Rezerwuję (całość)</button>';
+          h+='<button class="btn-secondary" onclick="grClaim(\''+g.id+'\',false)">Dołącz do składki</button>';
+        }
+      }
       if(mine&&n>1)h+='<button class="btn-secondary" style="font-size:.62rem;padding:.4rem .9rem" onclick="grCoBuy(\''+g.id+'\')">Współkupujący ('+(n-1)+')</button>';
       h+='</div></div></div>';
     });
@@ -231,28 +246,36 @@
   window.grFilt=function(c){activeCat=c;render();};
 
   // ── CLAIM ──
-  window.grClaim=function(id){
+  window.grClaim=function(id,solo){
     var g=gifts.filter(function(x){return x.id===id;})[0];if(!g)return;
     var n=g.signupCount||0;
     var h='<div style="text-align:center"><div class="modal-emoji">'+g.image+'</div>';
     h+='<h3 class="modal-title">'+esc(g.name)+'</h3><p class="modal-desc">'+esc(g.description)+'</p>';
-    if(n>0)h+='<p style="font-size:.72rem;color:var(--accent);font-style:italic;margin:0 0 1rem">Aktualnie '+pL(n)+' '+(n===1?'jest zapisana':n<5?'są zapisane':'jest zapisanych')+'</p>';
+    if(solo){
+      h+='<p style="font-size:.82rem;color:var(--accent);font-weight:400;margin:0 0 1rem">Rezerwacja całości \u2014 nikt inny nie będzie mógł dołączyć.</p>';
+    }else if(n>0){
+      h+='<p style="font-size:.82rem;color:var(--accent);font-style:italic;margin:0 0 1rem">Aktualnie '+pL(n)+' '+(n===1?'jest zapisana':n<5?'są zapisane':'jest zapisanych')+'. Dołączasz do składki.</p>';
+    }else{
+      h+='<p style="font-size:.82rem;color:var(--accent);font-style:italic;margin:0 0 1rem">Składka \u2014 inni goście będą mogli dołączyć.</p>';
+    }
     h+='<input class="modal-input" id="c-name" placeholder="Imię i nazwisko">';
     h+='<input class="modal-input" id="c-contact" placeholder="E-mail lub telefon (do koordynacji zakupu)">';
     h+='<p class="modal-note">Dane kontaktowe będą widoczne wyłącznie dla innych osób zapisanych na ten sam prezent \u2014 w celu koordynacji zakupu. Para Młoda ich nie zobaczy.</p>';
     h+='<div class="modal-actions"><button class="btn-secondary" onclick="closeM(\'modal-claim\')">Anuluj</button>';
-    h+='<button class="btn-primary" id="c-sub" onclick="grDoSign(\''+id+'\')">Potwierdzam</button></div></div>';
+    h+='<button class="btn-primary" id="c-sub" onclick="grDoSign(\''+id+'\','+!!solo+')">Potwierdzam</button></div></div>';
     openM('modal-claim',h);
     setTimeout(function(){var e=document.getElementById('c-name');if(e)e.focus();},100);
   };
 
-  window.grDoSign=function(id){
+  window.grDoSign=function(id,solo){
     var nm=(document.getElementById('c-name').value||'').trim();
     var ct=(document.getElementById('c-contact').value||'').trim();
     if(!nm||!ct)return;
     var b=document.getElementById('c-sub');b.disabled=true;b.textContent='Zapisuję\u2026';
     var code=myCode||String(Math.floor(1000+Math.random()*9000));
-    callApi({action:'signup',giftId:id,name:nm,contact:ct,code:code}).then(function(r){
+    var params={action:'signup',giftId:id,name:nm,contact:ct,code:code};
+    if(solo)params.solo='true';
+    callApi(params).then(function(r){
       if(r&&r.error){alert(r.error);b.disabled=false;b.textContent='Potwierdzam';return;}
       if(!myCode)myCode=code;closeM('modal-claim');
       var g=gifts.filter(function(x){return x.id===id;})[0];
@@ -296,17 +319,28 @@
       if(!mg.length)h+='<p style="font-size:.82rem;color:var(--muted);font-style:italic">Nie masz jeszcze żadnych rezerwacji.</p>';
       else mg.forEach(function(g){
         var ot=(g.signupCount||0)-1;
+        var isSolo=g.solo;
         h+='<div class="contact-card"><div style="display:flex;align-items:center;gap:.7rem"><span style="font-size:1.4rem">'+g.image+'</span><div>';
         h+='<div class="contact-card-name" style="font-size:.95rem">'+esc(g.name)+'</div>';
-        if(ot>0)h+='<div style="font-size:.72rem;color:var(--accent);margin-top:.15rem">+ '+pL(ot)+'</div>';
+        if(isSolo)h+='<div style="font-size:.72rem;color:var(--accent);margin-top:.15rem">Zarezerwowany tylko dla Ciebie \u2713</div>';
+        else if(ot>0)h+='<div style="font-size:.72rem;color:var(--accent);margin-top:.15rem">+ '+pL(ot)+'</div>';
         h+='</div></div><div style="display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap">';
         if(ot>0)h+='<button class="btn-secondary" style="font-size:.6rem;padding:.3rem .7rem" onclick="closeM(\'modal-reservations\');grCoBuy(\''+g.id+'\')">Współkupujący</button>';
+        if(!isSolo&&ot===0)h+='<button class="btn-secondary" style="font-size:.6rem;padding:.3rem .7rem" onclick="grLock(\''+g.id+'\')">Zablokuj dla siebie</button>';
         h+='<button class="btn-secondary btn-danger" style="font-size:.6rem;padding:.3rem .7rem" onclick="grDel(\''+g.id+'\')">Anuluj</button></div></div>';
       });
       openM('modal-reservations',h,true);
     });
   }
   window.grDel=function(id){if(!confirm('Anulować rezerwację?'))return;callApi({action:'cancel',giftId:id,code:myCode}).then(function(){closeM('modal-reservations');load();});};
+
+  window.grLock=function(id){
+    if(!confirm('Zablokować ten prezent tylko dla siebie? Nikt inny nie będzie mógł dołączyć.'))return;
+    callApi({action:'lockGift',giftId:id,code:myCode}).then(function(r){
+      if(r&&r.error){alert(r.error);return;}
+      closeM('modal-reservations');load();
+    }).catch(function(){alert('Błąd połączenia.');});
+  };
 
   // ── CO-BUYERS ──
   window.grCoBuy=function(id){
